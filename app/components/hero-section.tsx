@@ -24,7 +24,7 @@ export default function HeroSection({
     >
       <div
         className="absolute inset-0 bg-cover bg-[80%_center] bg-no-repeat md:bg-right"
-        style={{ backgroundImage: "url('/bg-2.png')" }}
+        style={{ backgroundImage: "url('/bg-3.png')" }}
       />
       <div className="pointer-events-none absolute inset-0 w-full bg-gradient-to-r from-[#0c0c0c] via-[#0c0c0c]/80 to-transparent md:w-3/4 lg:w-2/3" />
       <div
@@ -41,6 +41,9 @@ export default function HeroSection({
             visible={show}
             delay={0.5}
             className={heroNameClass}
+            style={{
+              WebkitTextFillColor: "#f0ece2",
+            }}
           />
         </div>
         <div className="overflow-hidden leading-none">
