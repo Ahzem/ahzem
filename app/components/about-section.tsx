@@ -11,7 +11,7 @@ type AboutSectionProps = {
 export default function AboutSection({ sectionRef, visible }: AboutSectionProps) {
   return (
     <section
-      className="grid grid-cols-1 items-start gap-10 px-[clamp(24px,5vw,80px)] py-40 md:grid-cols-2 md:gap-20"
+      className="grid grid-cols-1 items-start gap-10 px-[clamp(24px,5vw,80px)] pt-[140px] pb-[120px] md:grid-cols-2 md:gap-20"
       id="about"
       ref={sectionRef}
     >

@@ -126,7 +126,7 @@ export default function GallerySection() {
   return (
     <>
       <section
-        className="relative overflow-hidden px-[clamp(24px,5vw,80px)] pt-[140px] pb-[100px]"
+        className="relative overflow-hidden px-[clamp(24px,5vw,80px)] pt-[140px] pb-[120px]"
         id="gallery"
         ref={setRefs}
       >

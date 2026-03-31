@@ -35,8 +35,8 @@ export default function ProjectsSection({
 
   return (
     <>
-      <section className="pt-20 pb-0">
-        <div className="mb-10 px-[clamp(24px,5vw,80px)]">
+      <section className="px-[clamp(24px,5vw,80px)] pt-[140px] pb-0">
+        <div className="mb-10">
           <div className={aboutLabelClass}>Selected Work</div>
           <div className={aboutHeadingClass}>
             Projects<span className="text-[var(--accent)]">.</span>

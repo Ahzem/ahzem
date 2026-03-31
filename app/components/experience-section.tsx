@@ -19,7 +19,7 @@ export default function ExperienceSection({
 
   return (
     <section
-      className="px-[clamp(24px,5vw,80px)] py-40"
+      className="px-[clamp(24px,5vw,80px)] pt-[140px] pb-[120px]"
       id="experience"
       ref={sectionRef}
     >

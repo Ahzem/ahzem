@@ -22,7 +22,7 @@ export default function SkillsSection({ sectionRef, visible }: SkillsSectionProp
 
   return (
     <section
-      className="overflow-hidden px-[clamp(24px,5vw,80px)] py-40"
+      className="overflow-hidden px-[clamp(24px,5vw,80px)] pt-[140px] pb-[120px]"
       id="skills"
       ref={sectionRef}
     >

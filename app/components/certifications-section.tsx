@@ -19,7 +19,7 @@ export default function CertificationsSection({
 
   return (
     <section
-      className="border-t border-[var(--border-subtle)] px-[clamp(24px,5vw,80px)] py-[120px]"
+      className="border-t border-[var(--border-subtle)] px-[clamp(24px,5vw,80px)] pt-[140px] pb-[120px]"
       id="certifications"
       ref={sectionRef}
     >

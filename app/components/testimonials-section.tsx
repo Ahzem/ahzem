@@ -194,12 +194,12 @@ export default function TestimonialsSection() {
 
   return (
     <section
-      className="relative overflow-hidden pt-[140px] pb-[120px] before:absolute before:top-0 before:right-0 before:left-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-[var(--border-subtle)] before:to-transparent before:content-['']"
+      className="relative overflow-hidden px-[clamp(24px,5vw,80px)] pt-[140px] pb-[120px] before:absolute before:top-0 before:right-0 before:left-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-[var(--border-subtle)] before:to-transparent before:content-['']"
       id="testimonials"
       ref={secRef}
     >
       {/* header */}
-      <div className="mb-[60px] flex flex-wrap items-end justify-between gap-6 px-[clamp(24px,5vw,80px)]">
+      <div className="mb-[60px] flex flex-wrap items-end justify-between gap-6">
         <div>
           <div
             className="mb-4 text-[11px] font-medium uppercase tracking-[4px] text-[var(--accent)]"
@@ -257,7 +257,7 @@ export default function TestimonialsSection() {
       </div>
 
       {/* draggable card track */}
-      <div className="relative pl-[clamp(24px,5vw,80px)] after:pointer-events-none after:absolute after:top-0 after:right-0 after:bottom-5 after:z-[2] after:w-[120px] after:bg-gradient-to-r after:from-transparent after:to-[var(--background)] after:content-['']">
+      <div className="relative after:pointer-events-none after:absolute after:top-0 after:right-0 after:bottom-5 after:z-[2] after:w-[120px] after:bg-gradient-to-r after:from-transparent after:to-[var(--background)] after:content-['']">
         <div
           className="flex cursor-grab gap-6 overflow-x-auto pr-20 pb-5 [-webkit-overflow-scrolling:touch] [scroll-snap-type:x_proximity] [&::-webkit-scrollbar]:h-0 active:cursor-grabbing"
           ref={trackRef}
@@ -293,7 +293,7 @@ export default function TestimonialsSection() {
 
       {/* drag hint */}
       <div
-        className="flex items-center gap-2.5 px-[clamp(24px,5vw,80px)] pt-5 text-[11px] uppercase tracking-[2px] text-[var(--muted)]"
+        className="flex items-center gap-2.5 pt-5 text-[11px] uppercase tracking-[2px] text-[var(--muted)]"
         style={{ opacity: secVis ? 1 : 0, transition: "all 0.6s 1s" }}
       >
         <span className="h-px w-10 bg-gradient-to-r from-[var(--accent)] to-transparent" />
