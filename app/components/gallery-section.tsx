@@ -62,10 +62,10 @@ function GalleryImage({
           className="block w-full transition-[transform,filter] duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.06] group-hover:brightness-[0.7]"
         />
         <div className="absolute inset-0 flex items-end justify-between p-5 opacity-0 transition-opacity duration-[400ms] group-hover:opacity-100">
-          <span className="rounded bg-black/50 px-3.5 py-1.5 text-[13px] font-medium tracking-wide backdrop-blur-[8px]">
+          <span className="rounded bg-black/55 px-3.5 py-1.5 text-[13px] font-medium tracking-wide text-white backdrop-blur-[8px]">
             {caption}
           </span>
-          <span className="flex h-9 w-9 scale-0 items-center justify-center rounded-full bg-[#c9f31d] text-base font-bold text-[#0c0c0c] transition-transform duration-[400ms] ease-[cubic-bezier(0.19,1,0.22,1)] -rotate-90 group-hover:scale-100 group-hover:rotate-0">
+          <span className="flex h-9 w-9 scale-0 items-center justify-center rounded-full bg-[var(--accent)] text-base font-bold text-[var(--selection-fg)] transition-transform duration-[400ms] ease-[cubic-bezier(0.19,1,0.22,1)] -rotate-90 group-hover:scale-100 group-hover:rotate-0">
             ↗
           </span>
         </div>
@@ -132,13 +132,13 @@ export default function GallerySection() {
       >
         <div className="mb-[60px]">
           <div
-            className="mb-4 text-[11px] font-medium uppercase tracking-[4px] text-[#c9f31d]"
+            className="mb-4 text-[11px] font-medium uppercase tracking-[4px] text-[var(--accent)]"
             style={{ opacity: secVis ? 1 : 0, transition: "all 0.6s 0.1s" }}
           >
             Gallery
           </div>
           <div
-            className="mb-6 text-[clamp(36px,5vw,64px)] font-bold leading-[1.1] tracking-[-2px]"
+            className="mb-6 text-[clamp(36px,5vw,64px)] font-bold leading-[1.1] tracking-[-2px] text-[var(--foreground)]"
             style={{
               opacity: secVis ? 1 : 0,
               transform: secVis ? "translateY(0)" : "translateY(30px)",
@@ -146,10 +146,10 @@ export default function GallerySection() {
             }}
           >
             Moments &<br />
-            <span className="text-[#c9f31d]">milestones</span>
+            <span className="text-[var(--accent)]">milestones</span>
           </div>
           <p
-            className="max-w-[480px] text-base font-light leading-[1.7] text-[#666]"
+            className="max-w-[480px] text-base font-light leading-[1.7] text-[var(--muted)]"
             style={{ opacity: secVis ? 1 : 0, transition: "all 0.6s 0.4s" }}
           >
             Events, conferences, awards, and the community that keeps me going.
@@ -182,7 +182,7 @@ export default function GallerySection() {
 
       {lightbox && (
         <div
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[rgba(8,8,8,0.95)] p-10 backdrop-blur-[20px]"
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/90 p-10 backdrop-blur-[20px]"
           onClick={closeLb}
           style={{
             clipPath: lbVisible
@@ -192,7 +192,7 @@ export default function GallerySection() {
           }}
         >
           <div
-            className="absolute top-8 right-10 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-white/10 text-2xl text-[#999] transition-all duration-300 hover:border-[#c9f31d] hover:text-[#f0ece2]"
+            className="absolute top-8 right-10 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-white/15 text-2xl text-white/60 transition-all duration-300 hover:border-[var(--accent)] hover:text-[var(--accent)]"
             onClick={closeLb}
           >
             ✕
@@ -209,7 +209,7 @@ export default function GallerySection() {
             }}
           />
           <div
-            className="mt-5 text-[15px] tracking-wide text-[#999]"
+            className="mt-5 text-[15px] tracking-wide text-white/75"
             style={{
               opacity: lbVisible ? 1 : 0,
               transform: lbVisible ? "translateY(0)" : "translateY(20px)",

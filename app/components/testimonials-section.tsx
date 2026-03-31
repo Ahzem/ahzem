@@ -21,8 +21,8 @@ function TestimonialCard({
     <div
       className={`relative flex min-w-[clamp(300px,40vw,420px)] select-none flex-col gap-5 overflow-hidden rounded-xl border p-9 transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] [scroll-snap-align:start] ${
         isActive
-          ? "border-white/10 bg-white/[0.04] -translate-y-1.5"
-          : "border-white/[0.06] bg-white/[0.02]"
+          ? "-translate-y-1.5 border-[var(--foreground)]/12 bg-[var(--foreground)]/[0.05] dark:border-white/10 dark:bg-white/[0.04]"
+          : "border-[var(--border-subtle)] bg-[var(--foreground)]/[0.02] dark:bg-white/[0.02]"
       }`}
       onMouseEnter={() => onActivate(index)}
     >
@@ -51,10 +51,12 @@ function TestimonialCard({
 
       {/* relation badge */}
       <div
-        className="inline-flex self-start rounded-full border px-3.5 py-1 text-[11px] font-medium tracking-wide transition-all duration-[400ms]"
+        className={`inline-flex self-start rounded-full border px-3.5 py-1 text-[11px] font-medium tracking-wide transition-all duration-[400ms] ${
+          !isActive ? "border-[var(--border-subtle)] text-[var(--muted)]" : ""
+        }`}
         style={{
-          borderColor: isActive ? t.color : "rgba(255,255,255,0.08)",
-          color: isActive ? t.color : "#555",
+          borderColor: isActive ? t.color : undefined,
+          color: isActive ? t.color : undefined,
         }}
       >
         {t.relation}
@@ -63,7 +65,7 @@ function TestimonialCard({
       {/* quote */}
       <p
         className={`relative z-[1] text-[15px] font-light leading-[1.85] transition-colors duration-[400ms] ${
-          isActive ? "text-[#c8c4bb]" : "text-[#999]"
+          isActive ? "text-[var(--foreground)]" : "text-[var(--muted)]"
         }`}
       >
         {t.quote}
@@ -82,8 +84,10 @@ function TestimonialCard({
           {t.avatar}
         </div>
         <div>
-          <div className="mb-0.5 text-[15px] font-semibold">{t.name}</div>
-          <div className="text-xs leading-snug text-[#555]">{t.role}</div>
+          <div className="mb-0.5 text-[15px] font-semibold text-[var(--foreground)]">
+            {t.name}
+          </div>
+          <div className="text-xs leading-snug text-[var(--muted)]">{t.role}</div>
         </div>
       </div>
 
@@ -190,7 +194,7 @@ export default function TestimonialsSection() {
 
   return (
     <section
-      className="relative overflow-hidden pt-[140px] pb-[120px] before:absolute before:top-0 before:right-0 before:left-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/[0.06] before:to-transparent before:content-['']"
+      className="relative overflow-hidden pt-[140px] pb-[120px] before:absolute before:top-0 before:right-0 before:left-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-[var(--border-subtle)] before:to-transparent before:content-['']"
       id="testimonials"
       ref={secRef}
     >
@@ -198,7 +202,7 @@ export default function TestimonialsSection() {
       <div className="mb-[60px] flex flex-wrap items-end justify-between gap-6 px-[clamp(24px,5vw,80px)]">
         <div>
           <div
-            className="mb-4 text-[11px] font-medium uppercase tracking-[4px] text-[#c9f31d]"
+            className="mb-4 text-[11px] font-medium uppercase tracking-[4px] text-[var(--accent)]"
             style={{ opacity: secVis ? 1 : 0, transition: "all 0.6s 0.1s" }}
           >
             Testimonials
@@ -213,10 +217,10 @@ export default function TestimonialsSection() {
           >
             What others
             <br />
-            <span className="text-[#c9f31d]">say about me</span>
+            <span className="text-[var(--accent)]">say about me</span>
           </div>
           <p
-            className="max-w-[420px] text-[15px] font-light leading-[1.7] text-[#555]"
+            className="max-w-[420px] text-[15px] font-light leading-[1.7] text-[var(--muted)]"
             style={{ opacity: secVis ? 1 : 0, transition: "all 0.6s 0.4s" }}
           >
             Recommendations from teachers, mentors, managers, and teammates
@@ -237,14 +241,14 @@ export default function TestimonialsSection() {
             className="font-portfolio-mono text-[clamp(64px,10vw,96px)] font-extrabold leading-none text-transparent"
             style={{
               WebkitTextStroke: secVis
-                ? "1.5px #c9f31d"
-                : "1px rgba(255,255,255,0.12)",
+                ? "1.5px var(--accent)"
+                : "1px var(--counter-idle-stroke)",
               transition: "all 0.6s 0.8s",
             }}
           >
             0{count}
           </span>
-          <span className="max-w-[80px] text-[13px] uppercase leading-snug tracking-[1.5px] text-[#444]">
+          <span className="max-w-[80px] text-[13px] uppercase leading-snug tracking-[1.5px] text-[var(--muted)]">
             LinkedIn
             <br />
             Recommendations
@@ -253,7 +257,7 @@ export default function TestimonialsSection() {
       </div>
 
       {/* draggable card track */}
-      <div className="relative pl-[clamp(24px,5vw,80px)] after:pointer-events-none after:absolute after:top-0 after:right-0 after:bottom-5 after:z-[2] after:w-[120px] after:bg-gradient-to-r after:from-transparent after:to-[#0c0c0c] after:content-['']">
+      <div className="relative pl-[clamp(24px,5vw,80px)] after:pointer-events-none after:absolute after:top-0 after:right-0 after:bottom-5 after:z-[2] after:w-[120px] after:bg-gradient-to-r after:from-transparent after:to-[var(--background)] after:content-['']">
         <div
           className="flex cursor-grab gap-6 overflow-x-auto pr-20 pb-5 [-webkit-overflow-scrolling:touch] [scroll-snap-type:x_proximity] [&::-webkit-scrollbar]:h-0 active:cursor-grabbing"
           ref={trackRef}
@@ -289,12 +293,12 @@ export default function TestimonialsSection() {
 
       {/* drag hint */}
       <div
-        className="flex items-center gap-2.5 px-[clamp(24px,5vw,80px)] pt-5 text-[11px] uppercase tracking-[2px] text-[#333]"
+        className="flex items-center gap-2.5 px-[clamp(24px,5vw,80px)] pt-5 text-[11px] uppercase tracking-[2px] text-[var(--muted)]"
         style={{ opacity: secVis ? 1 : 0, transition: "all 0.6s 1s" }}
       >
-        <span className="h-px w-10 bg-gradient-to-r from-[#c9f31d] to-transparent" />
+        <span className="h-px w-10 bg-gradient-to-r from-[var(--accent)] to-transparent" />
         Drag to explore
-        <span className="animate-nudge text-[#555]">→</span>
+        <span className="animate-nudge text-[var(--muted)]">→</span>
       </div>
 
       {/* vertical dot ticker */}
@@ -304,8 +308,8 @@ export default function TestimonialsSection() {
             key={i}
             className={`h-1.5 w-1.5 rounded-full transition-all duration-[400ms] ${
               activeIndex === i
-                ? "scale-[1.3] bg-[#c9f31d] shadow-[0_0_12px_rgba(201,243,29,0.4)]"
-                : "bg-white/[0.06]"
+                ? "scale-[1.3] bg-[var(--accent)] shadow-[0_0_12px_color-mix(in_oklab,var(--accent)_40%,transparent)]"
+                : "bg-[var(--border-subtle)]"
             }`}
           />
         ))}

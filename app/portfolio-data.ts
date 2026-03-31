@@ -44,6 +44,37 @@ export const NAV_SECTIONS: SectionId[] = [
   SectionId.Contact,
 ];
 
+export type ContactLinkItem = {
+  label: string;
+  href: string;
+  /** Opens in new tab */
+  external?: boolean;
+  /** Suggested filename when downloading PDFs from /public */
+  downloadAs?: string;
+};
+
+/** `contact-section.tsx` — buttons. Add `resume.pdf` and `cv.pdf` to `/public` for downloads. */
+export const CONTACT_EMAIL = {
+  label: "Email",
+  href: "mailto:muhammadhahzem1422@gmail.com",
+} as const;
+
+export const CONTACT_DOWNLOADS: ContactLinkItem[] = [
+  { label: "Resume", href: "/resume.pdf", downloadAs: "Ahzem-Resume.pdf" },
+];
+
+/** Text links (social + profiles) below primary actions */
+export const CONTACT_SOCIAL_LINKS: ContactLinkItem[] = [
+  { label: "LinkedIn", href: "https://linkedin.com/in/ahzem", external: true },
+  { label: "GitHub", href: "https://github.com/ahzem", external: true },
+  { label: "Facebook", href: "https://web.facebook.com/mfm.ahzem", external: true },
+  { label: "Instagram", href: "https://www.instagram.com/_ahzem_/", external: true },
+  { label: "Threads", href: "https://www.threads.net/@_ahzem_", external: true },
+  { label: "X", href: "https://x.com/_ahzem_", external: true },
+  { label: "Medium", href: "https://medium.com/@ahzem", external: true },
+  { label: "Coffee", href: "https://coff.ee/ahzem", external: true },
+];
+
 export const PROJECTS: Project[] = [
   {
     num: "01",

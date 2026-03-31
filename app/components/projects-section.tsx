@@ -39,7 +39,7 @@ export default function ProjectsSection({
         <div className="mb-10 px-[clamp(24px,5vw,80px)]">
           <div className={aboutLabelClass}>Selected Work</div>
           <div className={aboutHeadingClass}>
-            Projects<span className="text-[#c9f31d]">.</span>
+            Projects<span className="text-[var(--accent)]">.</span>
           </div>
         </div>
       </section>
@@ -72,32 +72,32 @@ export default function ProjectsSection({
                 <div
                   className="absolute inset-0 transition-transform duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-105"
                   style={{
-                    background: `linear-gradient(135deg, ${project.color}18, ${project.color}08 40%, #0c0c0c 80%)`,
+                    background: `linear-gradient(135deg, ${project.color}18, ${project.color}08 40%, var(--background) 82%)`,
                   }}
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="font-portfolio-mono font-black tracking-[-6px] text-[clamp(100px,15vw,180px)] opacity-[0.04]">
+                  <span className="font-portfolio-mono font-black tracking-[-6px] text-[clamp(100px,15vw,180px)] text-[var(--foreground)] opacity-[0.06] dark:opacity-[0.04]">
                     {project.num}
                   </span>
                 </div>
                 <div className="relative z-[2] p-10">
-                  <div className="mb-2 font-portfolio-mono text-xs text-white/50">
+                  <div className="mb-2 font-portfolio-mono text-xs text-[var(--muted)]">
                     {project.num}
                   </div>
-                  <div className="mb-1 text-[clamp(28px,4vw,48px)] font-bold tracking-[-1px]">
+                  <div className="mb-1 text-[clamp(28px,4vw,48px)] font-bold tracking-[-1px] text-[var(--foreground)]">
                     {project.title}
                   </div>
-                  <div className="mb-4 text-sm font-light text-white/70">
+                  <div className="mb-4 text-sm font-light text-[var(--muted)]">
                     {project.sub}
                   </div>
-                  <div className="mb-4 max-w-[400px] text-[13px] leading-[1.7] text-white/50">
+                  <div className="mb-4 max-w-[400px] text-[13px] leading-[1.7] text-[var(--muted)]">
                     {project.desc}
                   </div>
-                  <div className="font-portfolio-mono text-[11px] tracking-wide text-white/35">
+                  <div className="font-portfolio-mono text-[11px] tracking-wide text-[var(--muted)] opacity-80">
                     {project.tech}
                   </div>
                   {project.link && (
-                    <span className="mt-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[1.5px] text-[#c9f31d] transition-[gap] duration-300 group-hover:gap-3.5">
+                    <span className="mt-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[1.5px] text-[var(--accent)] transition-[gap] duration-300 group-hover:gap-3.5">
                       Visit Live ↗
                     </span>
                   )}

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ThemeProvider } from "./components/theme-provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -27,11 +28,12 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
+      suppressHydrationWarning
     >
       <body
-        className={`${geistSans.variable} min-h-full flex flex-col bg-[#0c0c0c] font-portfolio text-[#f0ece2] overflow-x-hidden cursor-none selection:bg-[#c9f31d] selection:text-[#0c0c0c] [&::-webkit-scrollbar]:w-0 max-md:cursor-auto max-md:[&_a]:cursor-pointer max-md:[&_button]:cursor-pointer`}
+        className={`${geistSans.variable} min-h-full flex flex-col bg-background font-portfolio text-foreground overflow-x-hidden cursor-none selection:bg-[var(--selection-bg)] selection:text-[var(--selection-fg)] [&::-webkit-scrollbar]:w-0 max-md:cursor-auto max-md:[&_a]:cursor-pointer max-md:[&_button]:cursor-pointer`}
       >
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );
