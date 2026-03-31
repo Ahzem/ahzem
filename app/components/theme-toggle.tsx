@@ -23,7 +23,7 @@ export default function ThemeToggle({
   if (!mounted) {
     return (
       <div
-        className="h-9 w-9 shrink-0 rounded-full border border-white/10 bg-transparent"
+        className="h-9 w-9 shrink-0 border border-white/10 bg-transparent"
         aria-hidden
       />
     );
@@ -34,7 +34,7 @@ export default function ThemeToggle({
   return (
     <button
       type="button"
-      className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 text-[#f0ece2] transition-colors duration-300 hover:border-[#c9f31d]/50 hover:text-[#c9f31d]"
+      className="relative flex h-9 w-9 shrink-0 items-center justify-center border border-white/10 text-[#f0ece2] transition-colors duration-300 hover:border-[#c9f31d]/50 hover:text-[#c9f31d]"
       onClick={() => setTheme(isDark ? "light" : "dark")}
       onMouseEnter={onHoverStart}
       onMouseLeave={onHoverEnd}
