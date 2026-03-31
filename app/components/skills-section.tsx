@@ -52,7 +52,7 @@ export default function SkillsSection({ sectionRef, visible }: SkillsSectionProp
         {TOOLKIT_SKILLS.map((skill, i) => (
           <div
             key={skill}
-            className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--background)] px-4 py-6 text-center transition-[border-color,transform,box-shadow] duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] hover:-translate-y-0.5 hover:border-[#c9f31d]/50 hover:shadow-[0_20px_50px_-24px_rgb(0_0_0/0.35)] dark:hover:shadow-[0_24px_60px_-28px_rgb(0_0_0/0.55)]"
+            className="group relative flex flex-col items-center gap-3 overflow-hidden border border-[var(--border-subtle)] bg-[var(--background)] px-4 py-6 text-center transition-[border-color,transform,box-shadow] duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] hover:-translate-y-0.5 hover:border-[#c9f31d]/50 hover:shadow-[0_20px_50px_-24px_rgb(0_0_0/0.35)] dark:hover:shadow-[0_24px_60px_-28px_rgb(0_0_0/0.55)]"
             onMouseEnter={() => setCursor("")}
             onMouseLeave={resetCursor}
             style={{
@@ -62,7 +62,7 @@ export default function SkillsSection({ sectionRef, visible }: SkillsSectionProp
             }}
           >
             <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-              <div className="absolute -inset-px rounded-2xl bg-gradient-to-br from-[#c9f31d]/12 via-transparent to-transparent" />
+              <div className="absolute -inset-px bg-gradient-to-br from-[#c9f31d]/12 via-transparent to-transparent" />
             </div>
             <ToolkitIcon skill={skill} />
             <span className="relative z-10 text-[13px] font-medium leading-tight text-[var(--muted)] transition-colors duration-300 group-hover:text-[var(--foreground)]">

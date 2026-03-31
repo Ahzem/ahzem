@@ -30,14 +30,14 @@ function EduCard({ edu, index }: { edu: EducationEntry; index: number }) {
       }}
     >
       <div
-        className="absolute top-5 left-3 z-[3] h-4 w-4 -translate-x-1/2 rounded-full border-2 border-[var(--border-subtle)] bg-[var(--background)] transition-all duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)] md:left-1/2"
+        className="absolute top-5 left-3 z-[3] h-4 w-4 -translate-x-1/2 border-2 border-[var(--border-subtle)] bg-[var(--background)] transition-all duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)] md:left-1/2"
         style={{
           borderColor: vis ? edu.color : undefined,
           boxShadow: vis ? `0 0 20px ${edu.color}33` : "none",
         }}
       >
         <div
-          className="absolute top-1/2 left-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full transition-all delay-200 duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)]"
+          className="absolute top-1/2 left-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 transition-all delay-200 duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)]"
           style={{ background: vis ? edu.color : "transparent" }}
         />
       </div>
@@ -63,7 +63,7 @@ function EduCard({ edu, index }: { edu: EducationEntry; index: number }) {
       </div>
 
       <div
-        className={`relative cursor-pointer overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[color-mix(in_oklab,var(--foreground)_4%,var(--background))] p-7 transition-all duration-[400ms] ease-[cubic-bezier(0.19,1,0.22,1)] hover:-translate-y-1 hover:border-[color-mix(in_oklab,var(--foreground)_15%,var(--border-subtle))] hover:bg-[color-mix(in_oklab,var(--foreground)_7%,var(--background))] ${
+        className={`relative cursor-pointer overflow-hidden border border-[var(--border-subtle)] bg-[color-mix(in_oklab,var(--foreground)_4%,var(--background))] p-7 transition-all duration-[400ms] ease-[cubic-bezier(0.19,1,0.22,1)] hover:-translate-y-1 hover:border-[color-mix(in_oklab,var(--foreground)_15%,var(--border-subtle))] hover:bg-[color-mix(in_oklab,var(--foreground)_7%,var(--background))] ${
           isLeft
             ? "md:col-start-1 md:row-start-1 md:pr-[50px]"
             : "md:col-start-2 md:row-start-1 md:pl-[50px]"
@@ -98,7 +98,7 @@ function EduCard({ edu, index }: { edu: EducationEntry; index: number }) {
               {edu.activities.map((a, i) => (
                 <span
                   key={a}
-                  className="rounded-md border border-[var(--border-subtle)] bg-[color-mix(in_oklab,var(--foreground)_4%,transparent)] px-3 py-1.5 text-xs text-[var(--muted)] transition-all hover:border-[var(--accent)] hover:text-[var(--foreground)]"
+                  className="border border-[var(--border-subtle)] bg-[color-mix(in_oklab,var(--foreground)_4%,transparent)] px-3 py-1.5 text-xs text-[var(--muted)] transition-all hover:border-[var(--accent)] hover:text-[var(--foreground)]"
                   style={{
                     opacity: vis ? 1 : 0,
                     transform: vis ? "translateY(0)" : "translateY(8px)",
@@ -240,9 +240,9 @@ export default function EducationSection() {
 
       <div className="relative mx-auto max-w-[1200px]" ref={timelineRef}>
         <div className="absolute top-0 bottom-0 left-3 w-0.5 -translate-x-1/2 md:left-1/2 md:-translate-x-1/2">
-          <div className="absolute inset-0 rounded-sm bg-[var(--border-subtle)]" />
+          <div className="absolute inset-0 bg-[var(--border-subtle)]" />
           <div
-            className="absolute top-0 right-0 left-0 rounded-sm bg-gradient-to-b from-[#c9f31d] via-[#818cf8] to-[#06b6d4] transition-[height] duration-75 ease-linear"
+            className="absolute top-0 right-0 left-0 bg-gradient-to-b from-[#c9f31d] via-[#818cf8] to-[#06b6d4] transition-[height] duration-75 ease-linear"
             style={{ height: `${lineProgress * 100}%` }}
           />
         </div>

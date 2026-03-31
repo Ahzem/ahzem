@@ -22,7 +22,7 @@ function CounterPill({
 }) {
   return (
     <div
-      className="flex min-w-[80px] flex-col items-center rounded-lg border border-[var(--border-subtle)] px-5 py-3.5 transition-colors hover:border-[color-mix(in_oklab,var(--foreground)_15%,var(--border-subtle))]"
+      className="flex min-w-[80px] flex-col items-center border border-[var(--border-subtle)] px-5 py-3.5 transition-colors hover:border-[color-mix(in_oklab,var(--foreground)_15%,var(--border-subtle))]"
       style={{
         opacity: vis ? 1 : 0,
         transform: vis ? "translateY(0)" : "translateY(16px)",
@@ -56,6 +56,7 @@ function VolCard({
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [mouseX, setMouseX] = useState(0.5);
   const showDetails = hovered || focused;
 
   const setRefs = (el: HTMLDivElement | null) => {
@@ -64,10 +65,11 @@ function VolCard({
   };
 
   const handleMove = (e: React.MouseEvent) => {
-    if (showDetails) return;
     const el = cardRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
+    setMouseX((e.clientX - rect.left) / rect.width);
+    if (showDetails) return;
     const x = ((e.clientX - rect.left) / rect.width - 0.5) * 8;
     const y = ((e.clientY - rect.top) / rect.height - 0.5) * -8;
     setTilt({ x, y });
@@ -76,6 +78,7 @@ function VolCard({
   const handleLeave = () => {
     setHovered(false);
     setTilt({ x: 0, y: 0 });
+    setMouseX(0.5);
   };
 
   const isRevealed = vis || globalVis;
@@ -90,10 +93,10 @@ function VolCard({
   return (
     <div
       ref={setRefs}
-      className={`group relative h-fit min-h-[148px] overflow-hidden rounded-[14px] border border-[var(--border-subtle)] bg-[color-mix(in_oklab,var(--foreground)_3%,var(--background))] outline-none will-change-transform [perspective:800px] transition-[border-color,transform,opacity] duration-300 focus-visible:ring-2 focus-visible:ring-[var(--foreground)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] sm:min-h-[160px] ${sizeCol} ${
+      className={`group relative h-fit min-h-[148px] overflow-hidden border bg-[color-mix(in_oklab,var(--foreground)_3%,var(--background))] outline-none will-change-transform [perspective:800px] transition-[border-color,transform,opacity] duration-300 focus-visible:ring-2 focus-visible:ring-[var(--foreground)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] sm:min-h-[160px] ${sizeCol} ${
         showDetails
-          ? "z-[5] border-[color-mix(in_oklab,var(--foreground)_12%,var(--border-subtle))]"
-          : ""
+          ? "z-[5] border-[rgba(12,12,12,0.15)]"
+          : "border-[var(--border-subtle)]"
       }`}
       tabIndex={0}
       onFocus={() => setFocused(true)}
@@ -112,16 +115,27 @@ function VolCard({
       onMouseLeave={handleLeave}
       onMouseMove={handleMove}
     >
+      {/* same lime wipe as services-section ServiceRow */}
       <div
-        className="pointer-events-none absolute inset-0 rounded-[14px] transition-opacity duration-300"
+        className="pointer-events-none absolute inset-0 z-0 bg-[#c9f31d] transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"
         style={{
-          opacity: showDetails ? 0 : 1,
-          background: `radial-gradient(circle at ${(tilt.x / 8 + 0.5) * 100}% ${(-tilt.y / 8 + 0.5) * 100}%, ${v.color}20, transparent 70%)`,
+          transform: showDetails ? "scaleX(1)" : "scaleX(0)",
+          transformOrigin: mouseX < 0.5 ? "left" : "right",
         }}
       />
 
-      <div className="relative z-[1] flex min-h-[120px] flex-col gap-1.5 p-3 sm:p-4">
-        <div className="self-start rounded border border-[var(--border-subtle)] bg-[color-mix(in_oklab,var(--foreground)_4%,transparent)] px-1.5 py-px text-[8px] font-medium uppercase tracking-[1.2px] text-[var(--muted)]">
+      <div
+        className={`relative z-[1] flex min-h-[120px] flex-col gap-1.5 p-3 sm:p-4 transition-colors duration-300 ${
+          showDetails ? "text-[#0c0c0c]" : ""
+        }`}
+      >
+        <div
+          className={`self-start border px-1.5 py-px text-[8px] font-medium uppercase tracking-[1.2px] transition-colors duration-300 ${
+            showDetails
+              ? "border-[rgba(12,12,12,0.15)] bg-[rgba(12,12,12,0.06)] text-[#333]"
+              : "border-[var(--border-subtle)] bg-[color-mix(in_oklab,var(--foreground)_4%,transparent)] text-[var(--muted)]"
+          }`}
+        >
           {v.category}
         </div>
 
@@ -139,14 +153,27 @@ function VolCard({
           />
         </div>
 
-        <div className="text-[clamp(13px,1.5vw,16px)] font-bold leading-tight tracking-[-0.3px] text-[var(--foreground)]">
+        <div
+          className={`text-[clamp(13px,1.5vw,16px)] font-bold leading-tight tracking-[-0.3px] transition-colors duration-300 ${
+            showDetails ? "text-[#0c0c0c]" : "text-[var(--foreground)]"
+          }`}
+        >
           {v.role}
         </div>
-        <div className="text-[10px] font-medium leading-tight" style={{ color: v.color }}>
+        <div
+          className="text-[10px] font-medium leading-tight transition-colors duration-300"
+          style={{ color: showDetails ? "#0c0c0c" : v.color }}
+        >
           {v.org}
         </div>
 
-        <div className="relative flex h-4 items-center overflow-hidden rounded bg-[color-mix(in_oklab,var(--foreground)_5%,transparent)]">
+        <div
+          className={`relative flex h-4 items-center overflow-hidden transition-colors duration-300 ${
+            showDetails
+              ? "bg-[rgba(12,12,12,0.08)]"
+              : "bg-[color-mix(in_oklab,var(--foreground)_5%,transparent)]"
+          }`}
+        >
           <div
             className="absolute inset-0 origin-left opacity-20 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"
             style={{
@@ -154,13 +181,19 @@ function VolCard({
               transform: showDetails ? "scaleX(1)" : "scaleX(0.3)",
             }}
           />
-          <span className="relative z-[1] px-1.5 font-portfolio-mono text-[8px] tracking-wide text-[var(--muted)] transition-colors group-hover:text-[var(--foreground)]">
+          <span
+            className={`relative z-[1] px-1.5 font-portfolio-mono text-[8px] tracking-wide transition-colors duration-300 ${
+              showDetails ? "text-[#333]" : "text-[var(--muted)] group-hover:text-[var(--foreground)]"
+            }`}
+          >
             {v.period}
           </span>
         </div>
 
         <div
-          className="text-[7px] uppercase leading-none tracking-wide text-[var(--muted)] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.19,1,0.22,1)]"
+          className={`text-[7px] uppercase leading-none tracking-wide transition-[opacity,transform,color] duration-300 ease-[cubic-bezier(0.19,1,0.22,1)] ${
+            showDetails ? "text-[#333]" : "text-[var(--muted)]"
+          }`}
           style={{
             opacity: showDetails ? 0 : 0.55,
             transform: showDetails ? "translateY(4px)" : "translateY(0)",
@@ -174,11 +207,11 @@ function VolCard({
         <div
           role="region"
           aria-label={`${v.role} at ${v.org}`}
-          className="absolute inset-0 z-30 flex flex-col rounded-[inherit] border border-[var(--border-subtle)] bg-[color-mix(in_oklab,var(--background)_96%,var(--foreground))] shadow-2xl backdrop-blur-md transition-opacity duration-200"
+          className="absolute inset-0 z-30 flex flex-col border border-[rgba(12,12,12,0.12)] bg-[#c9f31d] shadow-2xl transition-opacity duration-200"
         >
-          <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-            <div className="flex shrink-0 items-center gap-2 border-b border-[var(--border-subtle)] px-3 py-2">
-              <span className="text-[8px] font-medium uppercase tracking-wide text-[var(--muted)]">
+          <div className="flex min-h-0 flex-1 flex-col overflow-hidden text-[#0c0c0c]">
+            <div className="flex shrink-0 items-center gap-2 border-b border-[rgba(12,12,12,0.12)] px-3 py-2">
+              <span className="text-[8px] font-medium uppercase tracking-wide text-[#333]">
                 {v.category}
               </span>
             </div>
@@ -197,7 +230,7 @@ function VolCard({
                 <div className="min-w-0 flex-1">
                   <div
                     id={`vol-${v.id}-title`}
-                    className="text-sm font-bold leading-snug text-[var(--foreground)]"
+                    className="text-sm font-bold leading-snug text-[#0c0c0c]"
                   >
                     {v.role}
                   </div>
@@ -209,10 +242,10 @@ function VolCard({
                   </div>
                 </div>
               </div>
-              <p className="text-[11px] font-light leading-relaxed text-[var(--muted)]">
+              <p className="text-[11px] font-light leading-relaxed text-[#333]">
                 {v.desc}
               </p>
-              <div className="mt-2 font-portfolio-mono text-[9px] text-[var(--muted)]">
+              <div className="mt-2 font-portfolio-mono text-[9px] text-[#333]">
                 {v.period}
               </div>
             </div>

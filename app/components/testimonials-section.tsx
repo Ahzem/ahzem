@@ -19,7 +19,7 @@ function TestimonialCard({
 
   return (
     <div
-      className={`relative flex min-w-[clamp(300px,40vw,420px)] select-none flex-col gap-5 overflow-hidden rounded-xl border p-9 transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] [scroll-snap-align:start] ${
+      className={`relative flex min-w-[clamp(300px,40vw,420px)] select-none flex-col gap-5 overflow-hidden border p-9 transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] [scroll-snap-align:start] ${
         isActive
           ? "-translate-y-1.5 border-[var(--foreground)]/12 bg-[var(--foreground)]/[0.05] dark:border-white/10 dark:bg-white/[0.04]"
           : "border-[var(--border-subtle)] bg-[var(--foreground)]/[0.02] dark:bg-white/[0.02]"
@@ -118,66 +118,95 @@ export default function TestimonialsSection() {
   const [activeIndex, setActiveIndex] = useState(-1);
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-  const [dragVelocity, setDragVelocity] = useState(0);
-  const lastXRef = useRef(0);
-  const lastTimeRef = useRef(0);
-  const momentumRef = useRef<number | null>(null);
+  const isDraggingRef = useRef(false);
+  const startClientXRef = useRef(0);
+  const startScrollLeftRef = useRef(0);
+  const velocityRef = useRef(0);
+  const lastSampleRef = useRef({ x: 0, t: 0 });
+  const momentumRafRef = useRef<number | null>(null);
+  const activePointerIdRef = useRef<number | null>(null);
 
-  const getPageX = (e: React.MouseEvent | React.TouchEvent): number => {
-    if ("touches" in e) return e.touches[0]?.pageX ?? 0;
-    return e.pageX;
-  };
+  const stopMomentum = useCallback(() => {
+    if (momentumRafRef.current !== null) {
+      cancelAnimationFrame(momentumRafRef.current);
+      momentumRafRef.current = null;
+    }
+  }, []);
 
-  const onDown = useCallback(
-    (e: React.MouseEvent | React.TouchEvent) => {
+  useEffect(() => () => stopMomentum(), [stopMomentum]);
+
+  const onPointerDown = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
       const track = trackRef.current;
       if (!track) return;
+      stopMomentum();
+      isDraggingRef.current = true;
       setIsDragging(true);
-      const x = getPageX(e);
-      setStartX(x);
-      setScrollLeft(track.scrollLeft);
-      lastXRef.current = x;
-      lastTimeRef.current = Date.now();
-      if (momentumRef.current) cancelAnimationFrame(momentumRef.current);
+      activePointerIdRef.current = e.pointerId;
+      startClientXRef.current = e.clientX;
+      startScrollLeftRef.current = track.scrollLeft;
+      velocityRef.current = 0;
+      lastSampleRef.current = { x: e.clientX, t: performance.now() };
+      track.setPointerCapture(e.pointerId);
+    },
+    [stopMomentum],
+  );
+
+  const onPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current || e.pointerId !== activePointerIdRef.current)
+      return;
+    const track = trackRef.current;
+    if (!track) return;
+    const x = e.clientX;
+    const dx = x - startClientXRef.current;
+    track.scrollLeft = startScrollLeftRef.current - dx;
+
+    const now = performance.now();
+    const dt = now - lastSampleRef.current.t;
+    if (dt > 0) {
+      const instPxPerMs = (lastSampleRef.current.x - x) / dt;
+      const instPerFrame = instPxPerMs * (1000 / 60);
+      velocityRef.current =
+        velocityRef.current * 0.35 + instPerFrame * 0.65;
+    }
+    lastSampleRef.current = { x, t: now };
+  }, []);
+
+  const endPointer = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (e.pointerId !== activePointerIdRef.current) return;
+      const track = trackRef.current;
+      isDraggingRef.current = false;
+      setIsDragging(false);
+      activePointerIdRef.current = null;
+      if (track?.hasPointerCapture(e.pointerId)) {
+        track.releasePointerCapture(e.pointerId);
+      }
+
+      let vel = velocityRef.current * 1.08;
+      const friction = 0.965;
+      const minVel = 0.4;
+      if (Math.abs(vel) < minVel) return;
+
+      const step = () => {
+        const el = trackRef.current;
+        if (!el) {
+          momentumRafRef.current = null;
+          return;
+        }
+        vel *= friction;
+        if (Math.abs(vel) < minVel) {
+          momentumRafRef.current = null;
+          return;
+        }
+        el.scrollLeft += vel;
+        momentumRafRef.current = requestAnimationFrame(step);
+      };
+      momentumRafRef.current = requestAnimationFrame(step);
     },
     [],
   );
-
-  const onMove = useCallback(
-    (e: React.MouseEvent | React.TouchEvent) => {
-      if (!isDragging) return;
-      const track = trackRef.current;
-      if (!track) return;
-      const x = getPageX(e);
-      const walk = (x - startX) * 1.2;
-      track.scrollLeft = scrollLeft - walk;
-
-      const now = Date.now();
-      const dt = now - lastTimeRef.current;
-      if (dt > 0) {
-        setDragVelocity(((lastXRef.current - x) / dt) * 16);
-      }
-      lastXRef.current = x;
-      lastTimeRef.current = now;
-    },
-    [isDragging, startX, scrollLeft],
-  );
-
-  const onUp = useCallback(() => {
-    setIsDragging(false);
-    const track = trackRef.current;
-    if (!track) return;
-    let vel = dragVelocity;
-    const decay = () => {
-      vel *= 0.92;
-      if (Math.abs(vel) < 0.5) return;
-      track.scrollLeft += vel;
-      momentumRef.current = requestAnimationFrame(decay);
-    };
-    momentumRef.current = requestAnimationFrame(decay);
-  }, [dragVelocity]);
 
   const [count, setCount] = useState(0);
   useEffect(() => {
@@ -259,15 +288,16 @@ export default function TestimonialsSection() {
       {/* draggable card track */}
       <div className="relative after:pointer-events-none after:absolute after:top-0 after:right-0 after:bottom-5 after:z-[2] after:w-[120px] after:bg-gradient-to-r after:from-transparent after:to-[var(--background)] after:content-['']">
         <div
-          className="flex cursor-grab gap-6 overflow-x-auto pr-20 pb-5 [-webkit-overflow-scrolling:touch] [scroll-snap-type:x_proximity] [&::-webkit-scrollbar]:h-0 active:cursor-grabbing"
+          className={`flex touch-none select-none gap-6 overflow-x-auto pr-20 pb-5 [-webkit-overflow-scrolling:touch] [&::-webkit-scrollbar]:h-0 ${
+            isDragging
+              ? "cursor-grabbing [scroll-snap-type:none]"
+              : "cursor-grab [scroll-snap-type:x_proximity]"
+          }`}
           ref={trackRef}
-          onMouseDown={onDown}
-          onMouseMove={onMove}
-          onMouseUp={onUp}
-          onMouseLeave={onUp}
-          onTouchStart={onDown}
-          onTouchMove={onMove}
-          onTouchEnd={onUp}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={endPointer}
+          onPointerCancel={endPointer}
         >
           {TESTIMONIALS.map((t, i) => (
             <div

@@ -39,7 +39,7 @@ function GalleryImage({
     >
       <div
         ref={imgRef}
-        className="group relative cursor-pointer overflow-hidden rounded-md will-change-transform"
+        className="group relative cursor-pointer overflow-hidden will-change-transform"
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => {
@@ -62,7 +62,7 @@ function GalleryImage({
           className="block w-full transition-[transform,filter] duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.06] group-hover:brightness-[0.7]"
         />
         <div className="absolute inset-0 flex items-end justify-between p-5 opacity-0 transition-opacity duration-[400ms] group-hover:opacity-100">
-          <span className="rounded bg-black/55 px-3.5 py-1.5 text-[13px] font-medium tracking-wide text-white backdrop-blur-[8px]">
+          <span className="bg-black/55 px-3.5 py-1.5 text-[13px] font-medium tracking-wide text-white backdrop-blur-[8px]">
             {caption}
           </span>
           <span className="flex h-9 w-9 scale-0 items-center justify-center rounded-full bg-[var(--accent)] text-base font-bold text-[var(--selection-fg)] transition-transform duration-[400ms] ease-[cubic-bezier(0.19,1,0.22,1)] -rotate-90 group-hover:scale-100 group-hover:rotate-0">
@@ -113,7 +113,18 @@ export default function GallerySection() {
   for (const img of GALLERY_IMAGES) {
     cols[img.col].push(img);
   }
-  const speeds = [-40, 20, -30];
+
+  const [parallaxFactor, setParallaxFactor] = useState(1);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const sync = () => setParallaxFactor(mq.matches ? 0.32 : 1);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  const baseSpeeds = [-40, 20, -30];
+  const speeds = baseSpeeds.map((s) => s * parallaxFactor);
 
   const setRefs = useCallback(
     (el: HTMLElement | null) => {
@@ -163,7 +174,10 @@ export default function GallerySection() {
               className={`flex flex-col gap-5 ${ci === 2 ? "hidden md:flex" : ""}`}
               style={{
                 transform: `translateY(${scrollOffset * speeds[ci]}px)`,
-                transition: "transform 0.05s linear",
+                transition:
+                  parallaxFactor < 1
+                    ? "transform 0.12s linear"
+                    : "transform 0.05s linear",
               }}
             >
               {col.map((img, i) => (
@@ -201,7 +215,7 @@ export default function GallerySection() {
           <img
             src={lightbox.src}
             alt={lightbox.caption}
-            className="max-h-[70vh] max-w-[80vw] rounded-lg object-contain"
+            className="max-h-[70vh] max-w-[80vw] object-contain"
             style={{
               transform: lbVisible ? "scale(1)" : "scale(0.9)",
               opacity: lbVisible ? 1 : 0,
