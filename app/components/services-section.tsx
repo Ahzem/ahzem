@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type RefObject } from "react";
+import { useRef, useState, type RefObject } from "react";
 import {
   Bot,
   Code2,
@@ -11,6 +11,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { SERVICES, type ServiceIconId } from "../portfolio-data";
+import { useReveal } from "../hooks/use-reveal";
 
 const SERVICE_ICONS: Record<ServiceIconId, LucideIcon> = {
   code2: Code2,
@@ -19,31 +20,6 @@ const SERVICE_ICONS: Record<ServiceIconId, LucideIcon> = {
   globe: Globe,
   zap: Zap,
   trendingUp: TrendingUp,
-};
-
-const useReveal = <T extends HTMLElement>(
-  thresh = 0.12,
-): [RefObject<T | null>, boolean] => {
-  const ref = useRef<T | null>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const o = new IntersectionObserver(
-      ([e]) => {
-        if (e?.isIntersecting) {
-          setVisible(true);
-          o.unobserve(el);
-        }
-      },
-      { threshold: thresh },
-    );
-    o.observe(el);
-    return () => o.disconnect();
-  }, [thresh]);
-
-  return [ref, visible];
 };
 
 function ServiceRow({

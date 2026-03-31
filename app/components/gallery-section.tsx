@@ -1,38 +1,8 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type RefObject,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { GALLERY_IMAGES } from "../portfolio-data";
-
-const useReveal = <T extends HTMLElement>(
-  thresh = 0.12,
-): [RefObject<T | null>, boolean] => {
-  const ref = useRef<T | null>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const o = new IntersectionObserver(
-      ([e]) => {
-        if (e?.isIntersecting) {
-          setVisible(true);
-          o.unobserve(el);
-        }
-      },
-      { threshold: thresh },
-    );
-    o.observe(el);
-    return () => o.disconnect();
-  }, [thresh]);
-
-  return [ref, visible];
-};
+import { useReveal } from "../hooks/use-reveal";
 
 function GalleryImage({
   src,
