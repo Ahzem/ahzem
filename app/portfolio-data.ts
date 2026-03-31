@@ -1,6 +1,8 @@
 export enum SectionId {
   About = "about",
   Experience = "experience",
+  Education = "education",
+  Volunteer = "volunteer",
   Projects = "projects",
   Services = "services",
   Skills = "skills",
@@ -36,6 +38,8 @@ export type Experience = {
 export const NAV_SECTIONS: SectionId[] = [
   SectionId.About,
   SectionId.Experience,
+  SectionId.Education,
+  SectionId.Volunteer,
   SectionId.Projects,
   SectionId.Services,
   SectionId.Skills,
@@ -208,6 +212,180 @@ export const EXPERIENCES: Experience[] = [
       }
     ]
   }
+];
+
+export type EducationEntry = {
+  id: number;
+  year: string;
+  endYear: string;
+  institution: string;
+  degree: string;
+  field: string | null;
+  location: string;
+  grade: string | null;
+  activities: string[] | null;
+  modules: string[] | null;
+  note: string | null;
+  color: string;
+};
+
+export const EDUCATION: EducationEntry[] = [
+  {
+    id: 1,
+    year: "2022",
+    endYear: "2025",
+    institution: "University of Moratuwa",
+    degree: "National Diploma in Technology",
+    field: "Information Technology",
+    location: "Moratuwa, Sri Lanka",
+    grade: null,
+    activities: [
+      "ITUM Computer Society",
+      "ZeroPlastic NDT",
+      "NDT Media Club",
+      "Gavel Club NDT",
+    ],
+    modules: [
+      "Software Development",
+      "Web Technologies",
+      "Database Management Systems",
+      "Cloud Computing",
+      "Machine Learning",
+      "Operating Systems",
+      "IoT",
+      "Software Testing & QC",
+      "Digital Marketing",
+      "Mathematics & Statistics",
+    ],
+    note: "Programme includes four academic semesters and two semesters of industrial training.",
+    color: "#c9f31d",
+  },
+  {
+    id: 2,
+    year: "2018",
+    endYear: "2020",
+    institution: "MR/Minhath National School",
+    degree: "Advanced Level",
+    field: "Physical Science",
+    location: "Dikwella, Sri Lanka",
+    grade: "Pass",
+    activities: ["OSDEM-DFEC Science Project Collaboration"],
+    modules: ["Combined Maths", "Physics", "Chemistry"],
+    note: null,
+    color: "#818cf8",
+  },
+  {
+    id: 3,
+    year: "2007",
+    endYear: "2017",
+    institution: "BD/Al-Yaseen Muslim Vidyalaya",
+    degree: "Ordinary Level",
+    field: null,
+    location: "Sri Lanka",
+    grade: "Pass",
+    activities: [
+      "Head Prefect (2017)",
+      "Member of Students Parliament (2015–2017)",
+    ],
+    modules: null,
+    note: null,
+    color: "#06b6d4",
+  },
+];
+
+export type VolunteerSize = "large" | "medium" | "small";
+
+export type VolunteerEntry = {
+  id: number;
+  role: string;
+  org: string;
+  period: string;
+  category: string;
+  desc: string;
+  /** Path under `/public`, e.g. `/clubs-logos/aws-cc.webp` */
+  logo: string;
+  color: string;
+  size: VolunteerSize;
+};
+
+export const VOLUNTEER: VolunteerEntry[] = [
+  {
+    id: 1,
+    role: "Vice President",
+    org: "AWS Cloud Clubs — ITUM",
+    period: "Apr 2025 — Present",
+    category: "Science & Technology",
+    desc: "Planning and executing marketing campaigns, managing social media, coordinating promotional content, and supporting community events such as AWS Student Community Day across Sri Lanka.",
+    logo: "/clubs-logos/aws-cc.webp",
+    color: "#FF9900",
+    size: "large",
+  },
+  {
+    id: 2,
+    role: "Microsoft Student Ambassador",
+    org: "Microsoft",
+    period: "Jan 2024 — Jan 2026",
+    category: "Science & Technology",
+    desc: "Part of a global group of campus leaders helping fellow students create robust tech communities and develop technical and career skills for the future.",
+    logo: "/clubs-logos/microsoft.webp",
+    color: "#00A4EF",
+    size: "medium",
+  },
+  {
+    id: 3,
+    role: "Webmaster",
+    org: "Gavel Club of ITUM",
+    period: "Mar 2024 — Apr 2025",
+    category: "Science & Technology",
+    desc: "Developed and managed the club's official website with event management, blog system, and secure hosting. Ensured a modern, user-friendly, and responsive platform.",
+    logo: "/clubs-logos/gavel-ndt.webp",
+    color: "#c9f31d",
+    size: "medium",
+  },
+  {
+    id: 4,
+    role: "Publicity Director",
+    org: "ITUM Computer Society",
+    period: "May 2023 — Apr 2025",
+    category: "Science & Technology",
+    desc: "Dedicated to fostering a vibrant IT community on campus — organizing engaging events, facilitating collaboration, and promoting knowledge sharing and innovation.",
+    logo: "/clubs-logos/itum-cs.webp",
+    color: "#818cf8",
+    size: "small",
+  },
+  {
+    id: 5,
+    role: "Director of Social Media",
+    org: "ZeroPlastic NDT",
+    period: "Aug 2023 — Apr 2025",
+    category: "Environment",
+    desc: "Working passionately towards reducing plastic waste and promoting environmental sustainability. Helped drive engagement and spread awareness about ZeroPlastic's mission.",
+    logo: "/clubs-logos/zero-plastic.webp",
+    color: "#22c55e",
+    size: "large",
+  },
+  {
+    id: 6,
+    role: "Social Media Manager",
+    org: "OSDEM-DFEC Science Project",
+    period: "Ongoing",
+    category: "Social Services",
+    desc: "Volunteering time and skills to help provide free educational opportunities to students aspiring to become engineers and doctors through strategic social media campaigns.",
+    logo: "/clubs-logos/osdem-dfec.webp",
+    color: "#06b6d4",
+    size: "small",
+  },
+  {
+    id: 7,
+    role: "Member",
+    org: "Generation ALPHA",
+    period: "Aug 2023 — Mar 2025",
+    category: "Social Services",
+    desc: "Committed to fostering innovation, personal growth, and collaboration within a dynamic community of learners and changemakers.",
+    logo: "/clubs-logos/gen-alpha.webp",
+    color: "#f472b6",
+    size: "small",
+  },
 ];
 
 export type Certification = {

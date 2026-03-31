@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import AboutSection from "./components/about-section";
 import CertificationsSection from "./components/certifications-section";
 import ContactSection from "./components/contact-section";
+import EducationSection from "./components/education-section";
+import VolunteerSection from "./components/volunteer-section";
 import CustomCursor from "./components/custom-cursor";
 import ExperienceSection from "./components/experience-section";
 import GallerySection from "./components/gallery-section";
@@ -137,6 +139,14 @@ export default function Home() {
       <SectionDivider />
 
       <ExperienceSection sectionRef={expRef} visible={expVis} />
+
+      <SectionDivider />
+
+      <EducationSection />
+
+      <SectionDivider />
+
+      <VolunteerSection />
 
       <SectionDivider />
 
