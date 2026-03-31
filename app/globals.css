@@ -6,6 +6,7 @@
   --font-portfolio-mono: "JetBrains Mono", monospace;
   --animate-scroll-pulse: scroll-pulse 2s ease infinite;
   --animate-marquee: marquee 30s linear infinite;
+  --animate-nudge: nudge 1.5s ease-in-out infinite;
 }
 
 @keyframes scroll-pulse {
@@ -28,6 +29,17 @@
 
   100% {
     transform: translateX(-50%);
+  }
+}
+
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(8px);
   }
 }
 

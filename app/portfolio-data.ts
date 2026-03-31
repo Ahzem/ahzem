@@ -2,7 +2,10 @@ export enum SectionId {
   About = "about",
   Experience = "experience",
   Projects = "projects",
+  Services = "services",
   Skills = "skills",
+  Gallery = "gallery",
+  Testimonials = "testimonials",
   Contact = "contact",
   Certifications = "certifications",
 }
@@ -34,7 +37,10 @@ export const NAV_SECTIONS: SectionId[] = [
   SectionId.About,
   SectionId.Experience,
   SectionId.Projects,
+  SectionId.Services,
   SectionId.Skills,
+  SectionId.Gallery,
+  SectionId.Testimonials,
   SectionId.Contact,
 ];
 
@@ -45,7 +51,7 @@ export const PROJECTS: Project[] = [
     sub: "Institutional Management System",
     desc: "Full-stack platform with role-based access, CI/CD pipelines, Docker containers, and live analytics — all deployed on AWS.",
     tech: "Next.js · NestJS · PostgreSQL · AWS · Docker",
-    link: "https://osdem-dfec.com",
+    link: "https://osdem-dfec-sc.org",
     color: "#c9f31d",
   },
   {
@@ -74,6 +80,33 @@ export const PROJECTS: Project[] = [
     tech: "React.js · Node.js · Azure · Cloudinary",
     link: null,
     color: "#06b6d4",
+  },
+  {
+    num: "05",
+    title: "LK PRAYER",
+    sub: "Smartwatch Prayer Time App",
+    desc: "Built a prayer time app for Zepp OS smartwatches featuring real-time countdowns, Hijri date, and custom vibration alerts. Data pipeline built with Python and a Node.js REST API.",
+    tech: "JavaScript · Node.js · TypeScript · Python · Zepp OS",
+    link: null,
+    color: "#10b981",
+  },
+  {
+    num: "06",
+    title: "CEYLONCHESTER",
+    sub: "Business Showcase Webpage",
+    desc: "Designed and developed a high-performing single-page business showcase. Delivered end-to-end branding, including logo and business card design, along with comprehensive technical SEO implementation.",
+    tech: "Next.js · SEO · Graphic Design",
+    link: "https://ceylonchester.netlify.app/",
+    color: "#f97316",
+  },
+  {
+    num: "07",
+    title: "BUSIFY",
+    sub: "Public Transport Tracking & Booking",
+    desc: "A comprehensive public transport management system where passengers can seamlessly book tickets, track real-time bus locations, and rate services. Built by a collaborative team at the University of Moratuwa.",
+    tech: "PHP · SQL",
+    link: null,
+    color: "#3b82f6",
   },
 ];
 
@@ -146,13 +179,207 @@ export const EXPERIENCES: Experience[] = [
   }
 ];
 
-export const CERTIFICATIONS = [
-  "GitHub Foundations",
-  "JavaScript Essential Training",
-  "Postman Student Expert",
-  "Foundations of UX Design",
-  "Build Wireframes & Prototypes",
-  "UX Design Process",
-  "Python, SQL, Java",
-  "C Programming Basics",
+export type Certification = {
+  name: string;
+  issuer: string;
+  date: string;
+  link?: string;
+  image?: string;
+};
+
+export const CERTIFICATIONS: Certification[] = [
+  {
+    name: "GitHub Foundations",
+    issuer: "GitHub",
+    date: "2024",
+    link: "https://www.credly.com/go/aIhQdSVK",
+    image: "https://images.credly.com/size/340x340/images/024d0122-724d-4c5a-bd83-cfe3c4b7a073/image.png"
+  },
+  {
+    name: "JavaScript Essential Training",
+    issuer: "LinkedIn Learning",
+    date: "2023",
+    link: "https://www.linkedin.com/learning/certificates/286e332a59cede041e7c52542cb4529e4f9582ac0c65d1248f31b21db91b4614",
+    image: "https://media.licdn.com/dms/image/v2/D4D22AQH5elGnyGJ6Fw/feedshare-shrink_1280/feedshare-shrink_1280/0/1720404328766?e=1774978755&v=beta&t=qc_MCbHsHUH7ovW81vpdjpQEuhF-CI9N4bX3nbiyzVQ"
+  },
+  {
+    name: "Postman Student Expert",
+    issuer: "Postman",
+    date: "2023",
+    link: "https://api.badgr.io/public/assertions/zM_0cp_cQkitK2YJc654sw?identity__email=muhammadhahzem1422@gmail.com",
+    image: "https://api.badgr.io/public/assertions/zM_0cp_cQkitK2YJc654sw/image"
+  },
+  {
+    name: "Foundations of UX Design",
+    issuer: "Google",
+    date: "2023",
+    link: "",
+    image: ""
+  },
+  {
+    name: "Build Wireframes & Prototypes",
+    issuer: "Google",
+    date: "2023",
+    link: "",
+    image: ""
+  },
+  {
+    name: "UX Design Process",
+    issuer: "Google",
+    date: "2023",
+    link: "",
+    image: ""
+  },
+  {
+    name: "Python, SQL, Java",
+    issuer: "Provider",
+    date: "2022",
+    link: "",
+    image: ""
+  },
+  {
+    name: "C Programming Basics",
+    issuer: "Provider",
+    date: "2022",
+    link: "",
+    image: ""
+  }
+];
+
+export type GalleryImage = {
+  src: string;
+  caption: string;
+  col: 0 | 1 | 2;
+};
+
+export const GALLERY_IMAGES: GalleryImage[] = [
+  { src: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80", caption: "Tech Conference 2024", col: 0 },
+  { src: "https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=600&q=80", caption: "Workshop Session", col: 1 },
+  { src: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600&q=80", caption: "Hackathon Finals", col: 2 },
+  { src: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600&q=80", caption: "Award Night", col: 0 },
+  { src: "https://images.unsplash.com/photo-1528901166007-3784c7dd3653?w=600&q=80", caption: "Team Collaboration", col: 1 },
+  { src: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=600&q=80", caption: "Community Meetup", col: 2 },
+  { src: "https://images.unsplash.com/photo-1559223607-a43c990c692c?w=600&q=80", caption: "Pitching at Startup Event", col: 0 },
+  { src: "https://images.unsplash.com/photo-1582192730841-2a682d7375f9?w=600&q=80", caption: "Microsoft Ambassador Summit", col: 1 },
+  { src: "https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=600&q=80", caption: "AWS Cloud Day 2025", col: 2 },
+];
+
+/** Lucide icon keys — rendered in `services-section.tsx` */
+export type ServiceIconId =
+  | "code2"
+  | "smartphone"
+  | "bot"
+  | "globe"
+  | "zap"
+  | "trendingUp";
+
+export type Service = {
+  num: string;
+  title: string;
+  desc: string;
+  tags: string[];
+  icon: ServiceIconId;
+};
+
+export const SERVICES: Service[] = [
+  {
+    num: "01",
+    title: "Full-Stack Web Development",
+    desc: "End-to-end web applications built with React, Next.js, Node.js, and NestJS — from architecture to deployment on AWS.",
+    tags: ["React", "Next.js", "Node.js", "AWS"],
+    icon: "code2",
+  },
+  {
+    num: "02",
+    title: "Mobile App Development",
+    desc: "Cross-platform mobile applications using Flutter with native-grade performance, backend integration, and app store deployment.",
+    tags: ["Flutter", "Dart", "REST APIs", "Firebase"],
+    icon: "smartphone",
+  },
+  {
+    num: "03",
+    title: "AI Automation & Agents",
+    desc: "Intelligent workflow automation using AI agents, chatbots, and voice assistants — replacing manual processes with smart systems.",
+    tags: ["CrewAI", "n8n", "VAPI", "Python"],
+    icon: "bot",
+  },
+  {
+    num: "04",
+    title: "Business Website + SEO",
+    desc: "Complete business web presence with custom design, on-page SEO, Google Analytics, Search Console, and search engine indexing.",
+    tags: ["SEO", "GA4", "Performance", "Responsive"],
+    icon: "globe",
+  },
+  {
+    num: "05",
+    title: "Digital Solutions for Business",
+    desc: "Custom software solutions to digitize operations — from institutional management systems to CRM integrations and data synchronization.",
+    tags: ["SaaS", "CRM", "PostgreSQL", "Docker"],
+    icon: "zap",
+  },
+  {
+    num: "06",
+    title: "Digital Marketing & Growth",
+    desc: "Data-driven digital presence strategies including social media management, content optimization, and analytics-backed growth.",
+    tags: ["Analytics", "Content", "Social", "Strategy"],
+    icon: "trendingUp",
+  },
+];
+
+export type Testimonial = {
+  name: string;
+  role: string;
+  relation: string;
+  quote: string;
+  highlight: string;
+  avatar: string;
+  color: string;
+};
+
+export const TESTIMONIALS: Testimonial[] = [
+  {
+    name: "Waseema Beham",
+    role: "Data Analyst · Muhammadh's Teacher",
+    relation: "Teacher",
+    quote: "An exceptionally talented student with a strong aptitude for learning. His growth has been remarkable — a competent IT student who consistently strives to excel with a unique ability to tackle challenges methodically.",
+    highlight: "exceptionally talented",
+    avatar: "WB",
+    color: "#818cf8",
+  },
+  {
+    name: "Mewan Jayathilake",
+    role: "Lecturer — CS & Software Engineering, ITUM",
+    relation: "Direct Manager",
+    quote: "One of my most exceptional undergraduate students. He stood out distinctly with his commitment to excellence, self-motivation, and admirable attitude. A standout candidate who I am confident will excel in any opportunity.",
+    highlight: "most exceptional",
+    avatar: "MJ",
+    color: "#c9f31d",
+  },
+  {
+    name: "Dileepa Bandara",
+    role: "Associate AI Engineer · Gold MSA (Alumni)",
+    relation: "Teammate",
+    quote: "A good team member in the Microsoft Learn Student Ambassadors — Sri Lanka community. He contributed to organizing events like the MS Build After Party, bringing creative ideas and helping ensure everything ran smoothly.",
+    highlight: "creative ideas",
+    avatar: "DB",
+    color: "#06b6d4",
+  },
+  {
+    name: "Raveen Amarasinghe",
+    role: "General Manager — Oculus International",
+    relation: "Mentor",
+    quote: "Ahzem handled social media tasks effectively and proved to be a valuable volunteer, bringing enthusiasm and dedication to his role. His work helped drive engagement and spread awareness about ZeroPlastic NDT's mission.",
+    highlight: "valuable volunteer",
+    avatar: "RA",
+    color: "#f472b6",
+  },
+  {
+    name: "Diluksha Perera",
+    role: "Associate Data Engineer · GOLD MSA",
+    relation: "Teammate",
+    quote: "Instrumental in our projects, often stepping up to take on key responsibilities with enthusiasm. His collaborative spirit and positive attitude have helped create an inspiring environment where everyone feels motivated.",
+    highlight: "collaborative spirit",
+    avatar: "DP",
+    color: "#fb923c",
+  },
 ];

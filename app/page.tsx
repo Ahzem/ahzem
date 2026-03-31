@@ -18,6 +18,9 @@ import {
   SKILLS_RIGHT,
 } from "./portfolio-data";
 import Image from "next/image";
+import ServicesSection from "./components/services-section";
+import GallerySection from "./components/gallery-section";
+import TestimonialsSection from "./components/testimonials-section";
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const clamp = (v: number, lo: number, hi: number) =>
@@ -598,6 +601,10 @@ export default function Home() {
         </div>
       </section>
 
+      <ServicesSection />
+
+      <div className="mx-[clamp(24px,5vw,80px)] h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+
       <section
         className="overflow-hidden px-[clamp(24px,5vw,80px)] py-40"
         id="skills"
@@ -666,32 +673,75 @@ export default function Home() {
         >
           Certifications<span className="text-[#c9f31d]">.</span>
         </div>
-        <div className="mt-[60px] grid gap-px bg-white/[0.06] [grid-template-columns:repeat(auto-fill,minmax(260px,1fr))]">
-          {CERTIFICATIONS.map((cert, i) => (
-            <div
-              key={cert}
-              className="flex items-start gap-4 bg-[#0c0c0c] p-8 transition-[background-color] duration-300 hover:bg-[rgba(201,243,29,0.03)]"
-              onMouseEnter={() => setCursor("")}
-              onMouseLeave={resetCursor}
-              style={{
-                opacity: certVis ? 1 : 0,
-                transform: certVis ? "translateY(0)" : "translateY(20px)",
-                transition: `all 0.5s ${0.3 + i * 0.06}s`,
-              }}
-            >
-              <div>
-                <div className="font-portfolio-mono text-xs text-[#333]">
-                  {String(i + 1).padStart(2, "0")}
+        <div className="mt-[60px] grid gap-px bg-white/[0.06] [grid-template-columns:repeat(auto-fill,minmax(320px,1fr))]">
+          {CERTIFICATIONS.map((cert, i) => {
+            const hasLink = Boolean(cert.link);
+            return (
+              <div
+                key={cert.name}
+                className={`group relative flex flex-col gap-5 bg-[#0c0c0c] p-8 transition-[background-color] duration-300 hover:bg-[rgba(201,243,29,0.03)] ${
+                  hasLink ? "cursor-none max-md:cursor-pointer" : ""
+                }`}
+                role={hasLink ? "link" : undefined}
+                tabIndex={hasLink ? 0 : undefined}
+                aria-label={hasLink ? `View credential for ${cert.name}` : undefined}
+                onMouseEnter={() => setCursor(hasLink ? "visit" : "")}
+                onMouseLeave={resetCursor}
+                onClick={() => hasLink && window.open(cert.link, "_blank", "noopener,noreferrer")}
+                onKeyDown={(e) => {
+                  if (hasLink && (e.key === "Enter" || e.key === " ")) {
+                    e.preventDefault();
+                    window.open(cert.link, "_blank", "noopener,noreferrer");
+                  }
+                }}
+                style={{
+                  opacity: certVis ? 1 : 0,
+                  transform: certVis ? "translateY(0)" : "translateY(20px)",
+                  transition: `all 0.5s ${0.3 + i * 0.06}s`,
+                }}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="font-portfolio-mono text-xs text-[#555]">
+                    {String(i + 1).padStart(2, "0")}
+                  </div>
+                  <div className="font-portfolio-mono text-[11px] uppercase tracking-wider text-[#c9f31d]">
+                    {cert.date}
+                  </div>
                 </div>
-                <div className="text-[15px] font-medium">{cert}</div>
-                <div className="mt-2 flex aspect-[16/10] w-full items-center justify-center rounded bg-white/[0.03] text-[11px] uppercase tracking-wide text-[#333]">
-                  Certificate Image
+                <div>
+                  <div className="mb-1.5 text-[20px] font-bold tracking-[-0.5px] transition-colors group-hover:text-[#c9f31d]">
+                    {cert.name}
+                  </div>
+                  <div className="text-[13px] tracking-wide text-[#777]">
+                    {cert.issuer}
+                  </div>
+                </div>
+                <div className="mt-2 flex aspect-[16/10] w-full overflow-hidden rounded bg-white/[0.03]">
+                  {cert.image ? (
+                    <Image
+                      src={cert.image}
+                      alt={cert.name}
+                      width={400}
+                      height={250}
+                      className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-[#333] transition-colors duration-300 group-hover:text-[#444]">
+                      <span className="text-[11px] uppercase tracking-wide">Certificate Image</span>
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
+
+      <div className="mx-[clamp(24px,5vw,80px)] h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+
+      <GallerySection />
+
+      <TestimonialsSection />
 
       <div className="mx-[clamp(24px,5vw,80px)] h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
 
