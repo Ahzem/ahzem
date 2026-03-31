@@ -20,6 +20,8 @@ export type Project = {
   tech: string;
   link: string | null;
   color: string;
+  /** Background for project card — `/public/...` or remote URL */
+  image: string;
 };
 
 export type ExperienceRole = {
@@ -88,6 +90,8 @@ export const PROJECTS: Project[] = [
     tech: "Next.js · NestJS · PostgreSQL · AWS · Docker",
     link: "https://osdem-dfec-sc.org",
     color: "#c9f31d",
+    image:
+      "https://images.unsplash.com/photo-1551434678-e076c223a692?w=1200&q=80",
   },
   {
     num: "02",
@@ -97,6 +101,8 @@ export const PROJECTS: Project[] = [
     tech: "React 19 · TypeScript · Node.js · MongoDB · AWS",
     link: "https://inprint-tps.com",
     color: "#818cf8",
+    image:
+      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&q=80",
   },
   {
     num: "03",
@@ -106,6 +112,8 @@ export const PROJECTS: Project[] = [
     tech: "Flutter · Node.js · Express.js · MongoDB",
     link: null,
     color: "#f472b6",
+    image:
+      "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1200&q=80",
   },
   {
     num: "04",
@@ -115,6 +123,8 @@ export const PROJECTS: Project[] = [
     tech: "React.js · Node.js · Azure · Cloudinary",
     link: null,
     color: "#06b6d4",
+    image:
+      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&q=80",
   },
   {
     num: "05",
@@ -124,6 +134,8 @@ export const PROJECTS: Project[] = [
     tech: "JavaScript · Node.js · TypeScript · Python · Zepp OS",
     link: null,
     color: "#10b981",
+    image:
+      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=1200&q=80",
   },
   {
     num: "06",
@@ -133,6 +145,8 @@ export const PROJECTS: Project[] = [
     tech: "Next.js · SEO · Graphic Design",
     link: "https://ceylonchester.netlify.app/",
     color: "#f97316",
+    image:
+      "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=80",
   },
   {
     num: "07",
@@ -142,6 +156,8 @@ export const PROJECTS: Project[] = [
     tech: "PHP · SQL",
     link: null,
     color: "#3b82f6",
+    image:
+      "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=1200&q=80",
   },
 ];
 

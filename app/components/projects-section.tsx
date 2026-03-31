@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import type { KeyboardEvent, RefObject } from "react";
 import { PROJECTS } from "../portfolio-data";
 import { aboutHeadingClass, aboutLabelClass } from "./section-styles";
@@ -52,7 +53,7 @@ export default function ProjectsSection({
             {PROJECTS.map((project) => (
               <div
                 key={project.num}
-                className={`group relative flex min-h-[70vh] min-w-[clamp(340px,45vw,600px)] flex-col justify-end overflow-hidden rounded-lg transition-transform duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)] hover:scale-[0.97] ${
+                className={`group relative flex min-h-[70vh] min-w-[clamp(340px,45vw,600px)] flex-col justify-end overflow-hidden transition-transform duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)] hover:scale-[0.97] ${
                   project.link
                     ? "cursor-none max-md:cursor-pointer"
                     : "cursor-default"
@@ -69,17 +70,29 @@ export default function ProjectsSection({
                   handleProjectKeyDown(event, project.link)
                 }
               >
+                <Image
+                  src={project.image}
+                  alt={`${project.title} preview`}
+                  fill
+                  sizes="(max-width: 768px) 90vw, 45vw"
+                  className="object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-105"
+                  priority={project.num === "01"}
+                />
+
                 <div
-                  className="absolute inset-0 transition-transform duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-105"
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 z-[1]"
                   style={{
-                    background: `linear-gradient(135deg, ${project.color}18, ${project.color}08 40%, var(--background) 82%)`,
+                    background: `linear-gradient(to top, var(--background) 0%, color-mix(in oklab, var(--background) 90%, transparent) 38%, transparent 68%), linear-gradient(135deg, ${project.color}45 0%, transparent 55%), linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, transparent 40%)`,
                   }}
                 />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="font-portfolio-mono font-black tracking-[-6px] text-[clamp(100px,15vw,180px)] text-[var(--foreground)] opacity-[0.06] dark:opacity-[0.04]">
+
+                <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center">
+                  <span className="font-portfolio-mono font-black tracking-[-6px] text-[clamp(100px,15vw,180px)] text-[var(--foreground)] opacity-[0.08] dark:opacity-[0.06]">
                     {project.num}
                   </span>
                 </div>
+
                 <div className="relative z-[2] p-10">
                   <div className="mb-2 font-portfolio-mono text-xs text-[var(--muted)]">
                     {project.num}
