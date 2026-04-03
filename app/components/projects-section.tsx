@@ -36,7 +36,7 @@ export default function ProjectsSection({
 
   return (
     <>
-      <section className="px-[clamp(24px,5vw,80px)] pt-[140px] pb-0">
+      <section className="px-[clamp(24px,5vw,80px)] pt-[140px] pb-0" id="projects">
         <div className="mb-10">
           <div className={aboutLabelClass}>Selected Work</div>
           <div className={aboutHeadingClass}>
