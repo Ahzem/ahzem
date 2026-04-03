@@ -1,20 +1,31 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GALLERY_IMAGES } from "../portfolio-data";
 import { useReveal } from "../hooks/use-reveal";
 
+const HOME_GALLERY_PREVIEW_COUNT = 12;
+
+function getGalleryCaption(src: string) {
+  const file = decodeURIComponent(src.split("/").pop() ?? src);
+  return file.replace(/\.[^.]+$/, "");
+}
+
+function getGallerySrc(src: string) {
+  return encodeURI(src);
+}
+
 function GalleryImage({
   src,
-  caption,
   index,
   onClick,
 }: {
   src: string;
-  caption: string;
   index: number;
   onClick: (img: { src: string; caption: string }) => void;
 }) {
+  const caption = getGalleryCaption(src);
   const imgRef = useRef<HTMLDivElement | null>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
@@ -56,7 +67,7 @@ function GalleryImage({
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={src}
+          src={getGallerySrc(src)}
           alt={caption}
           draggable={false}
           className="block w-full transition-[transform,filter] duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.06] group-hover:brightness-[0.7]"
@@ -123,9 +134,10 @@ export default function GallerySection() {
     };
   }, [lightbox, closeLb]);
 
-  const cols: (typeof GALLERY_IMAGES)[] = [[], [], []];
-  for (const img of GALLERY_IMAGES) {
-    cols[img.col].push(img);
+  const previewImages = GALLERY_IMAGES.slice(0, HOME_GALLERY_PREVIEW_COUNT);
+  const cols: (typeof previewImages)[] = [[], [], []];
+  for (const [idx, img] of previewImages.entries()) {
+    cols[idx % 3].push(img);
   }
 
   const [parallaxFactor, setParallaxFactor] = useState(1);
@@ -196,15 +208,27 @@ export default function GallerySection() {
             >
               {col.map((img, i) => (
                 <GalleryImage
-                  key={`${img.caption}-${i}`}
+                  key={`${img.src}-${i}`}
                   src={img.src}
-                  caption={img.caption}
                   index={ci * 3 + i}
                   onClick={openLb}
                 />
               ))}
             </div>
           ))}
+        </div>
+
+        <div
+          className="mt-10 flex justify-center"
+          style={{ opacity: secVis ? 1 : 0, transition: "all 0.6s 0.55s" }}
+        >
+          <Link
+            href="/gallery"
+            className="inline-flex items-center gap-2 border border-[var(--border-subtle)] px-4 py-2 text-xs font-semibold uppercase tracking-[2px] text-[var(--foreground)] transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          >
+            View all gallery images
+            <span aria-hidden>↗</span>
+          </Link>
         </div>
       </section>
 
@@ -239,7 +263,7 @@ export default function GallerySection() {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={lightbox.src}
+              src={getGallerySrc(lightbox.src)}
               alt={lightbox.caption}
               className="max-h-[70vh] max-w-full rounded-lg object-contain shadow-2xl ring-1 ring-[color-mix(in_oklab,var(--background)_25%,transparent)] dark:ring-white/10"
               style={{

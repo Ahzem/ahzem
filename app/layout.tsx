@@ -32,6 +32,7 @@ export default function RootLayout({
     >
       <body
         className={`${geistSans.variable} min-h-full flex flex-col bg-background font-portfolio text-foreground overflow-x-hidden cursor-none selection:bg-[var(--selection-bg)] selection:text-[var(--selection-fg)] [&::-webkit-scrollbar]:w-0 max-md:cursor-auto max-md:[&_a]:cursor-pointer max-md:[&_button]:cursor-pointer`}
+        suppressHydrationWarning
       >
         <ThemeProvider>{children}</ThemeProvider>
       </body>
