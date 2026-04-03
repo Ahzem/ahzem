@@ -25,7 +25,7 @@ export default function HeroSection({
     >
       <div
         className="absolute inset-0 bg-cover bg-[80%_center] bg-no-repeat md:bg-right"
-        style={{ backgroundImage: "url('/bg-3.png')" }}
+        style={{ backgroundImage: "url('/bg-3.webp')" }}
       />
       <div className="pointer-events-none absolute inset-0 w-full bg-gradient-to-r from-[#0c0c0c] via-[#0c0c0c]/80 to-transparent md:w-3/4 lg:w-2/3" />
       <div
