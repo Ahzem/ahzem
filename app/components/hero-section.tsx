@@ -7,15 +7,16 @@ import { SplitText } from "./split-text";
 type HeroSectionProps = {
   sectionRef: RefObject<HTMLElement | null>;
   visible: boolean;
-  loaded: boolean;
+  /** True after preloader has fully finished and unmounted */
+  introDone: boolean;
 };
 
 export default function HeroSection({
   sectionRef,
   visible,
-  loaded,
+  introDone,
 }: HeroSectionProps) {
-  const show = visible && loaded;
+  const show = visible && introDone;
 
   return (
     <section

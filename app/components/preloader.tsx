@@ -5,9 +5,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type PreloaderProps = {
   loaded: boolean;
+  /** Fires once after exit animation, when the overlay is removed */
+  onHidden?: () => void;
 };
 
-export default function Preloader({ loaded }: PreloaderProps) {
+export default function Preloader({ loaded, onHidden }: PreloaderProps) {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -38,8 +40,8 @@ export default function Preloader({ loaded }: PreloaderProps) {
       const target = loaded ? 100 : 92;
       const distance = Math.max(target - p, 0);
       const step = loaded
-        ? Math.max(0.8, distance * 0.18 + Math.random() * 0.7)
-        : Math.max(0.2, distance * 0.06 + Math.random() * 0.35);
+        ? Math.max(0.55, distance * 0.12 + Math.random() * 0.45)
+        : Math.max(0.15, distance * 0.045 + Math.random() * 0.22);
 
       p = Math.min(p + step, target);
       progressRef.current = p;
@@ -51,7 +53,7 @@ export default function Preloader({ loaded }: PreloaderProps) {
         exitTimer = window.setTimeout(() => setExit(true), 900);
         hideTimer = window.setTimeout(() => setHidden(true), 1700);
       }
-    }, 50);
+    }, 72);
 
     return () => {
       window.clearInterval(iv);
@@ -60,6 +62,11 @@ export default function Preloader({ loaded }: PreloaderProps) {
       if (hideTimer !== null) window.clearTimeout(hideTimer);
     };
   }, [loaded, hidden]);
+
+  useEffect(() => {
+    if (!hidden) return;
+    onHidden?.();
+  }, [hidden, onHidden]);
 
   const animateWave = useCallback(() => {
     const el = waveRef.current;
@@ -76,15 +83,15 @@ export default function Preloader({ loaded }: PreloaderProps) {
     for (let x = 0; x <= 720; x += 4) {
       const y =
         waterY +
-        Math.sin(x * 0.025 + t * 2.2) * 5 +
-        Math.sin(x * 0.015 + t * 1.5) * 3 +
-        Math.sin(x * 0.04 + t * 3.0) * 2;
+        Math.sin(x * 0.025 + t * 1.45) * 5 +
+        Math.sin(x * 0.015 + t * 1.0) * 3 +
+        Math.sin(x * 0.04 + t * 1.95) * 2;
       d += x === 0 ? `M 0 ${y}` : ` L ${x} ${y}`;
     }
     d += " L 720 180 L 0 180 Z";
     el.setAttribute("d", d);
 
-    timeRef.current += 0.04;
+    timeRef.current += 0.024;
     rafRef.current = window.requestAnimationFrame(animateWave);
   }, []);
 

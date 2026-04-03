@@ -35,6 +35,7 @@ export default function Home() {
   const [cursorLabel, setCursorLabel] = useState("");
   const [cursorScale, setCursorScale] = useState(1);
   const [loaded, setLoaded] = useState(false);
+  const [introDone, setIntroDone] = useState(false);
 
   const hScrollRef = useRef<HTMLElement | null>(null);
   const hWrapRef = useRef<HTMLDivElement | null>(null);
@@ -110,6 +111,10 @@ export default function Home() {
     setCursorScale(1);
   }, []);
 
+  const onPreloaderHidden = useCallback(() => {
+    setIntroDone(true);
+  }, []);
+
   const cursorApi: PortfolioCursorApi = useMemo(
     () => ({ setCursor, resetCursor }),
     [setCursor, resetCursor],
@@ -126,11 +131,11 @@ export default function Home() {
         scale={cursorScale}
       />
 
-      <Preloader loaded={loaded} />
+      <Preloader loaded={loaded} onHidden={onPreloaderHidden} />
 
       <SiteNav />
 
-      <HeroSection sectionRef={heroRef} visible={heroVis} loaded={loaded} />
+      <HeroSection sectionRef={heroRef} visible={heroVis} introDone={introDone} />
 
       <MarqueeStrip />
 
