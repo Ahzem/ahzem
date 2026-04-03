@@ -42,12 +42,21 @@ const SVG_PATHS = [
 const COLORS = ["#c9f31d", "#818cf8", "#06b6d4", "#f472b6", "#fb923c"];
 const TEX_PX = 256;
 
-// Size buckets: each logo gets a random size from one of three tiers
-const SIZES = {
+/** Desktop — matches current look */
+const SIZES_DESKTOP = {
   small: [70, 95],
   medium: [100, 130],
   large: [140, 180],
 } as const;
+
+/** Mobile — smaller so the pile doesn’t overwhelm the viewport */
+const SIZES_MOBILE = {
+  small: [36, 48],
+  medium: [52, 68],
+  large: [72, 92],
+} as const;
+
+const MD_BREAKPOINT = 768;
 
 async function rasterizeSvg(url: string, px: number): Promise<string> {
   try {
@@ -166,19 +175,23 @@ export default function FooterSvgPhysics() {
       };
       makeWalls(cw, ch);
 
+      const narrow = cw < MD_BREAKPOINT;
+      const sizeTable = narrow ? SIZES_MOBILE : SIZES_DESKTOP;
+      const edgePad = Math.max(32, Math.min(80, cw * 0.12));
+
       // Spawn one body per valid texture — varied sizes
-      const tiers: (keyof typeof SIZES)[] = ["small", "medium", "large"];
+      const tiers: (keyof typeof SIZES_DESKTOP)[] = ["small", "medium", "large"];
       for (let i = 0; i < valid.length; i++) {
         const tex = valid[i];
         const tier = tiers[i % 3];
-        const [lo, hi] = SIZES[tier];
+        const [lo, hi] = sizeTable[tier];
         const size = Common.random(lo, hi);
         const scale = size / TEX_PX;
         const color = COLORS[Math.floor(Math.random() * COLORS.length)];
 
         const body = Bodies.circle(
-          Common.random(80, cw - 80),
-          Common.random(-1200, -40),
+          Common.random(edgePad, Math.max(edgePad + 1, cw - edgePad)),
+          Common.random(narrow ? -900 : -1200, -40),
           size / 2,
           {
             restitution: 0.45,

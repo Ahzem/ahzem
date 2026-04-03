@@ -23,7 +23,7 @@ export default function ThemeToggle({
   if (!mounted) {
     return (
       <div
-        className="h-9 w-9 shrink-0 border border-white/10 bg-transparent"
+        className="h-10 w-10 shrink-0 border border-white/10 bg-transparent md:h-9 md:w-9"
         aria-hidden
       />
     );
@@ -34,7 +34,7 @@ export default function ThemeToggle({
   return (
     <button
       type="button"
-      className="relative flex h-9 w-9 shrink-0 items-center justify-center border border-white/10 text-[#f0ece2] transition-colors duration-300 hover:border-[#c9f31d]/50 hover:text-[#c9f31d]"
+      className="relative flex h-10 w-10 shrink-0 items-center justify-center border border-white/10 text-[#f0ece2] transition-colors duration-300 hover:border-[#c9f31d]/50 hover:text-[#c9f31d] md:h-9 md:w-9"
       onClick={() => setTheme(isDark ? "light" : "dark")}
       onMouseEnter={onHoverStart}
       onMouseLeave={onHoverEnd}
@@ -42,9 +42,9 @@ export default function ThemeToggle({
       title={isDark ? "Light mode" : "Dark mode"}
     >
       {isDark ? (
-        <Sun className="size-[18px]" strokeWidth={1.75} aria-hidden />
+        <Sun className="size-5 md:size-[18px]" strokeWidth={1.75} aria-hidden />
       ) : (
-        <Moon className="size-[18px]" strokeWidth={1.75} aria-hidden />
+        <Moon className="size-5 md:size-[18px]" strokeWidth={1.75} aria-hidden />
       )}
     </button>
   );

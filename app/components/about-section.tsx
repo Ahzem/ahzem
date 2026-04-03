@@ -36,7 +36,7 @@ export default function AboutSection({ sectionRef, visible }: AboutSectionProps)
         >
           Building things
           <br />
-          that <span className="text-[#c9f31d]">matter</span>
+          that <span className="text-[var(--accent)]">matter</span>
         </div>
         <div className="mt-12 grid grid-cols-3 gap-6">
           {[
@@ -46,17 +46,17 @@ export default function AboutSection({ sectionRef, visible }: AboutSectionProps)
           ].map(([n, label], i) => (
             <div
               key={label}
-              className="rounded border border-white/[0.06] p-6 transition-[border-color] duration-300 hover:border-[#c9f31d]"
+              className="rounded border border-[var(--border-subtle)] bg-[color-mix(in_oklab,var(--foreground)_2%,var(--background))] p-6 transition-[border-color,background-color] duration-300 hover:border-[var(--accent)]"
               style={{
                 opacity: visible ? 1 : 0,
                 transform: visible ? "translateY(0)" : "translateY(30px)",
                 transition: `all 0.6s ${0.4 + i * 0.1}s`,
               }}
             >
-              <div className="font-portfolio-mono text-[40px] font-bold text-[#c9f31d]">
+              <div className="font-portfolio-mono text-[40px] font-bold text-[var(--accent)]">
                 {n}
               </div>
-              <div className="mt-1 text-[11px] uppercase tracking-[2px] text-[#666]">
+              <div className="mt-1 text-[11px] uppercase tracking-[2px] text-[var(--muted)]">
                 {label}
               </div>
             </div>
@@ -65,7 +65,7 @@ export default function AboutSection({ sectionRef, visible }: AboutSectionProps)
       </div>
       <div>
         <div
-          className="text-base font-light leading-[1.9] text-[#999] [&_strong]:font-medium [&_strong]:text-[#f0ece2]"
+          className="text-base font-light leading-[1.9] text-[var(--muted)] [&_strong]:font-medium [&_strong]:text-[var(--foreground)]"
           style={{
             opacity: visible ? 1 : 0,
             transform: visible ? "translateY(0)" : "translateY(30px)",
@@ -76,7 +76,7 @@ export default function AboutSection({ sectionRef, visible }: AboutSectionProps)
           with professional experience at <strong>Efito Solutions</strong>, where I
           was promoted from Trainee to Associate Software Engineer within one year —
           recognized as{" "}
-          <strong className="font-medium text-[#c9f31d]">
+          <strong className="font-medium text-[var(--accent)]">
             &quot;Rising Star of 2025.&quot;
           </strong>
           <br />
