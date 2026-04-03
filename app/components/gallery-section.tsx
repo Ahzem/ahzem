@@ -29,6 +29,7 @@ function GalleryImage({
   const imgRef = useRef<HTMLDivElement | null>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(false);
   const [rRef, vis] = useReveal<HTMLDivElement>(0.15);
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -50,7 +51,7 @@ function GalleryImage({
     >
       <div
         ref={imgRef}
-        className="group relative cursor-pointer overflow-hidden will-change-transform"
+        className="group relative cursor-pointer overflow-hidden bg-[color-mix(in_oklab,var(--border-subtle)_70%,var(--background))] will-change-transform"
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => {
@@ -65,12 +66,31 @@ function GalleryImage({
             : "transform 0.5s cubic-bezier(.19,1,.22,1)",
         }}
       >
+        {!imgLoaded && (
+          <div
+            className="absolute inset-0"
+            aria-hidden
+            style={{
+              background:
+                "linear-gradient(110deg, color-mix(in oklab, var(--border-subtle) 85%, var(--background)) 8%, color-mix(in oklab, var(--background) 35%, white) 18%, color-mix(in oklab, var(--border-subtle) 85%, var(--background)) 33%)",
+              backgroundSize: "200% 100%",
+              animation: "galleryShimmer 1.2s linear infinite",
+            }}
+          />
+        )}
+
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={getGallerySrc(src)}
           alt={caption}
           draggable={false}
-          className="block w-full transition-[transform,filter] duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.06] group-hover:brightness-[0.7]"
+          loading="lazy"
+          decoding="async"
+          className={`block w-full transition-[opacity,transform,filter] duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.06] group-hover:brightness-[0.7] ${
+            imgLoaded ? "opacity-100" : "opacity-0"
+          }`}
+          onLoad={() => setImgLoaded(true)}
+          onError={() => setImgLoaded(true)}
         />
         <div className="absolute inset-0 flex items-end justify-between p-5 opacity-0 transition-opacity duration-[400ms] group-hover:opacity-100">
           <span className="bg-black/55 px-3.5 py-1.5 text-[13px] font-medium tracking-wide text-white backdrop-blur-[8px]">
@@ -285,6 +305,13 @@ export default function GallerySection() {
           </div>
         </div>
       )}
+
+      <style>{`
+        @keyframes galleryShimmer {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
+        }
+      `}</style>
     </>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import AboutSection from "./components/about-section";
+import BuyMeCoffeeSection from "./components/buy-me-coffee-section";
 import CertificationsSection from "./components/certifications-section";
 import ContactSection from "./components/contact-section";
 import EducationSection from "./components/education-section";
@@ -174,6 +175,8 @@ export default function Home() {
       <TestimonialsSection />
 
       <SectionDivider />
+
+      <BuyMeCoffeeSection />
 
       <ContactSection sectionRef={contactRef} visible={contactVis} />
 
