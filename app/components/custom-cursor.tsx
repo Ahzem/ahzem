@@ -15,7 +15,7 @@ export default function CustomCursor({
 }: CustomCursorProps) {
   return (
     <div
-      className="pointer-events-none fixed z-[9999] flex items-center justify-center mix-blend-difference transition-[width,height,background-color] duration-[400ms] ease-[cubic-bezier(0.19,1,0.22,1)] max-md:!hidden"
+      className="pointer-events-none fixed z-[10001] flex items-center justify-center mix-blend-difference transition-[width,height,background-color] duration-[400ms] ease-[cubic-bezier(0.19,1,0.22,1)] max-md:!hidden"
       style={{
         left: x,
         top: y,
@@ -24,6 +24,10 @@ export default function CustomCursor({
         borderRadius: "50%",
         background: label ? "#c9f31d" : "#f0ece2",
         transform: "translate(-50%,-50%)",
+        boxShadow:
+          scale === 1
+            ? "0 0 0 1px rgb(0 0 0 / 0.12), 0 1px 4px rgb(0 0 0 / 0.2)"
+            : "0 0 0 1px rgb(0 0 0 / 0.08), 0 4px 20px rgb(0 0 0 / 0.25)",
       }}
     >
       <span
