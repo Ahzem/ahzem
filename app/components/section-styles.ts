@@ -7,3 +7,6 @@ export const aboutLabelClass =
 
 export const aboutHeadingClass =
   "mb-8 text-[clamp(36px,5vw,64px)] font-bold tracking-[-2px] leading-[1.1] text-[var(--foreground)]";
+
+/** Makes children unselectable — use on sections with drag/physics backgrounds */
+export const unselectableClass = "select-none [-webkit-user-select:none]";

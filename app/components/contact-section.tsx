@@ -7,8 +7,9 @@ import {
   CONTACT_EMAIL,
   CONTACT_SOCIAL_LINKS,
 } from "../portfolio-data";
-import { aboutLabelClass } from "./section-styles";
+import { aboutLabelClass, unselectableClass } from "./section-styles";
 import { usePortfolioCursor } from "./portfolio-cursor-context";
+import FooterSvgPhysics from "./footer-svg-physics";
 
 type ContactSectionProps = {
   sectionRef: RefObject<HTMLElement | null>;
@@ -26,75 +27,81 @@ export default function ContactSection({ sectionRef, visible }: ContactSectionPr
 
   return (
     <section
-      className="px-[clamp(24px,5vw,80px)] pt-[140px] pb-[120px] text-center"
+      className="relative overflow-hidden px-[clamp(24px,5vw,80px)] pt-[140px] pb-[120px] text-center"
       id="contact"
       ref={sectionRef}
     >
-      <div
-        className={`${aboutLabelClass} flex justify-center`}
-        style={{
-          opacity: visible ? 1 : 0,
-          transition: "all 0.6s 0.1s",
-        }}
-      >
-        Contact
-      </div>
-      <div
-        className="mb-10 text-[clamp(40px,8vw,120px)] font-bold leading-none tracking-[-3px] max-md:tracking-[-1px]"
-        style={{
-          opacity: visible ? 1 : 0,
-          transform: visible ? "translateY(0)" : "translateY(50px)",
-          transition: "all 0.8s cubic-bezier(.19,1,.22,1) 0.2s",
-        }}
-      >
-        LET&apos;S <span className="text-[#c9f31d]">TALK</span>
-      </div>
+      {/* Physics background — logos fall behind the text */}
+      <FooterSvgPhysics />
 
-      <div
-        className="mx-auto mb-14 flex max-w-[1100px] flex-wrap items-center justify-center gap-4"
-        style={{ opacity: visible ? 1 : 0, transition: "all 0.6s 0.45s" }}
-      >
-        <a
-          href={CONTACT_EMAIL.href}
-          className={btnClass}
-          onMouseEnter={() => setCursor("mail")}
-          onMouseLeave={resetCursor}
+      {/* Content sits above the canvas */}
+      <div className={`relative z-10 ${unselectableClass}`}>
+        <div
+          className={`${aboutLabelClass} flex justify-center`}
+          style={{
+            opacity: visible ? 1 : 0,
+            transition: "all 0.6s 0.1s",
+          }}
         >
-          <Mail className="size-[18px] shrink-0" aria-hidden />
-          {CONTACT_EMAIL.label}
-        </a>
-        {CONTACT_DOWNLOADS.map((doc) => (
-          <a
-            key={doc.label}
-            href={doc.href}
-            className={btnClass}
-            download={doc.downloadAs}
-            onMouseEnter={() => setCursor("open")}
-            onMouseLeave={resetCursor}
-          >
-            <Download className="size-[18px] shrink-0" aria-hidden />
-            {doc.label}
-          </a>
-        ))}
-      </div>
+          Contact
+        </div>
+        <div
+          className="mb-10 text-[clamp(40px,8vw,120px)] font-bold leading-none tracking-[-3px] max-md:tracking-[-1px]"
+          style={{
+            opacity: visible ? 1 : 0,
+            transform: visible ? "translateY(0)" : "translateY(50px)",
+            transition: "all 0.8s cubic-bezier(.19,1,.22,1) 0.2s",
+          }}
+        >
+          LET&apos;S <span className="text-[#c9f31d]">TALK</span>
+        </div>
 
-      <div
-        className="mx-auto flex max-w-[1100px] flex-wrap justify-center gap-x-10 gap-y-6"
-        style={{ opacity: visible ? 1 : 0, transition: "all 0.6s 0.55s" }}
-      >
-        {CONTACT_SOCIAL_LINKS.map((link) => (
+        <div
+          className="mx-auto mb-14 flex max-w-[1100px] flex-wrap items-center justify-center gap-4"
+          style={{ opacity: visible ? 1 : 0, transition: "all 0.6s 0.45s" }}
+        >
           <a
-            key={link.label}
-            href={link.href}
-            className={linkClass}
-            rel={link.external ? "noreferrer noopener" : undefined}
-            target={link.external ? "_blank" : undefined}
-            onMouseEnter={() => setCursor("open")}
+            href={CONTACT_EMAIL.href}
+            className={btnClass}
+            onMouseEnter={() => setCursor("mail")}
             onMouseLeave={resetCursor}
           >
-            {link.label}
+            <Mail className="size-[18px] shrink-0" aria-hidden />
+            {CONTACT_EMAIL.label}
           </a>
-        ))}
+          {CONTACT_DOWNLOADS.map((doc) => (
+            <a
+              key={doc.label}
+              href={doc.href}
+              className={btnClass}
+              download={doc.downloadAs}
+              onMouseEnter={() => setCursor("open")}
+              onMouseLeave={resetCursor}
+            >
+              <Download className="size-[18px] shrink-0" aria-hidden />
+              {doc.label}
+            </a>
+          ))}
+        </div>
+
+        <div
+          className="mx-auto flex max-w-[1100px] flex-wrap justify-center gap-x-10 gap-y-6"
+          style={{ opacity: visible ? 1 : 0, transition: "all 0.6s 0.55s" }}
+        >
+          {CONTACT_SOCIAL_LINKS.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              className={linkClass}
+              rel={link.external ? "noreferrer noopener" : undefined}
+              target={link.external ? "_blank" : undefined}
+              onMouseEnter={() => setCursor("open")}
+              onMouseLeave={resetCursor}
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
       </div>
     </section>
   );
