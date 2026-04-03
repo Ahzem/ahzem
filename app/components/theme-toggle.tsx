@@ -7,11 +7,19 @@ import { useEffect, useState } from "react";
 type ThemeToggleProps = {
   onHoverStart?: () => void;
   onHoverEnd?: () => void;
+  /** On black hero / dark imagery — light outline. On cream page — theme border + fg */
+  variant?: "onDarkSurface" | "onPage";
 };
+
+const onDarkClass =
+  "border-white/10 text-[#f0ece2] hover:border-[#c9f31d]/50 hover:text-[#c9f31d]";
+const onPageClass =
+  "border-[var(--border-subtle)] text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]";
 
 export default function ThemeToggle({
   onHoverStart,
   onHoverEnd,
+  variant = "onPage",
 }: ThemeToggleProps) {
   const [mounted, setMounted] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
@@ -20,10 +28,14 @@ export default function ThemeToggle({
     setMounted(true);
   }, []);
 
+  const surface = variant === "onDarkSurface" ? onDarkClass : onPageClass;
+  const skeletonBorder =
+    variant === "onDarkSurface" ? "border-white/10" : "border-[var(--border-subtle)]";
+
   if (!mounted) {
     return (
       <div
-        className="h-10 w-10 shrink-0 border border-white/10 bg-transparent md:h-9 md:w-9"
+        className={`h-10 w-10 shrink-0 border bg-transparent md:h-9 md:w-9 ${skeletonBorder}`}
         aria-hidden
       />
     );
@@ -34,7 +46,7 @@ export default function ThemeToggle({
   return (
     <button
       type="button"
-      className="relative flex h-10 w-10 shrink-0 items-center justify-center border border-white/10 text-[#f0ece2] transition-colors duration-300 hover:border-[#c9f31d]/50 hover:text-[#c9f31d] md:h-9 md:w-9"
+      className={`relative flex h-10 w-10 shrink-0 items-center justify-center border transition-colors duration-300 md:h-9 md:w-9 ${surface}`}
       onClick={() => setTheme(isDark ? "light" : "dark")}
       onMouseEnter={onHoverStart}
       onMouseLeave={onHoverEnd}

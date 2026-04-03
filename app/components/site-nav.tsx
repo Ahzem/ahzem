@@ -1,14 +1,18 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
-import { useCallback, useEffect, useId, useState } from "react";
+import { useTheme } from "next-themes";
+import { useCallback, useEffect, useId, useLayoutEffect, useState } from "react";
 import { NAV_SECTIONS } from "../portfolio-data";
 import { usePortfolioCursor } from "./portfolio-cursor-context";
 import ThemeToggle from "./theme-toggle";
 
 export default function SiteNav() {
   const { setCursor, resetCursor } = usePortfolioCursor();
+  const { resolvedTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const menuId = useId();
 
   const scrollToSection = (id: string) => {
@@ -54,6 +58,43 @@ export default function SiteNav() {
     return () => mq.removeEventListener("change", closeIfDesktop);
   }, []);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useLayoutEffect(() => {
+    const hero = document.getElementById("hero");
+    if (!hero) return;
+    const update = () => {
+      setPastHero(hero.getBoundingClientRect().bottom < 72);
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
+
+  const isDark = resolvedTheme === "dark";
+  const onBlackHero = !menuOpen && !pastHero;
+
+  const logoClass =
+    menuOpen || (mounted && isDark) || (pastHero && !isDark)
+      ? "text-[var(--foreground)] hover:text-[var(--accent)]"
+      : "text-[#f0ece2] hover:text-[#c9f31d]";
+
+  const desktopLinkClass =
+    !pastHero && (!mounted || !isDark)
+      ? "text-white/55 hover:text-[#f0ece2] after:bg-[#c9f31d]"
+      : "text-[var(--muted)] hover:text-[var(--foreground)] after:bg-[var(--accent)]";
+
+  const menuIconClass =
+    menuOpen || (mounted && isDark) || (pastHero && !isDark)
+      ? "border-[var(--border-subtle)] text-[var(--foreground)]"
+      : "border-white/15 text-[#f0ece2]";
+
   return (
     <>
       <nav
@@ -65,7 +106,7 @@ export default function SiteNav() {
       >
         <button
           type="button"
-          className="border-none bg-transparent p-0 font-inherit text-lg font-bold tracking-[-0.5px]"
+          className={`border-none bg-transparent p-0 font-inherit text-lg font-bold tracking-[-0.5px] mix-blend-normal transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)] ${logoClass}`}
           aria-label="Scroll to top"
           onMouseEnter={() => setCursor("home")}
           onMouseLeave={resetCursor}
@@ -83,7 +124,7 @@ export default function SiteNav() {
               <button
                 key={section}
                 type="button"
-                className="relative border-none bg-transparent p-0 font-inherit text-[13px] font-normal uppercase tracking-wide text-[#999] transition-colors duration-300 after:absolute after:bottom-[-4px] after:left-0 after:h-px after:w-0 after:bg-[#c9f31d] after:transition-[width] after:duration-[400ms] after:ease-[cubic-bezier(0.19,1,0.22,1)] hover:text-[#f0ece2] hover:after:w-full"
+                className={`relative border-none bg-transparent p-0 font-inherit text-[13px] font-normal uppercase tracking-wide transition-colors duration-300 after:absolute after:bottom-[-4px] after:left-0 after:h-px after:w-0 after:transition-[width] after:duration-[400ms] after:ease-[cubic-bezier(0.19,1,0.22,1)] hover:after:w-full ${desktopLinkClass}`}
                 onClick={() => scrollToSection(section)}
                 onMouseEnter={() => setCursor("")}
                 onMouseLeave={resetCursor}
@@ -94,17 +135,14 @@ export default function SiteNav() {
           </div>
 
           <ThemeToggle
+            variant={onBlackHero ? "onDarkSurface" : "onPage"}
             onHoverStart={() => setCursor("")}
             onHoverEnd={resetCursor}
           />
 
           <button
             type="button"
-            className={`flex h-10 w-10 shrink-0 items-center justify-center border transition-colors hover:border-[#c9f31d]/50 hover:text-[#c9f31d] md:hidden ${
-              menuOpen
-                ? "border-[var(--border-subtle)] text-[var(--foreground)]"
-                : "border-white/15 text-[#f0ece2]"
-            }`}
+            className={`flex h-10 w-10 shrink-0 items-center justify-center border transition-colors hover:border-[#c9f31d]/50 hover:text-[#c9f31d] md:hidden ${menuIconClass}`}
             aria-expanded={menuOpen}
             aria-controls={menuId}
             aria-label={menuOpen ? "Close menu" : "Open menu"}

@@ -22,7 +22,7 @@ export function SplitText({
       {text.split("").map((ch, i) => (
         <span
           key={`${text}-${i}`}
-          className="inline-block"
+          className="inline-block [color:inherit] [-webkit-text-fill-color:inherit]"
           style={{
             opacity: visible ? 1 : 0,
             transform: visible

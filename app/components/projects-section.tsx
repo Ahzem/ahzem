@@ -1,10 +1,19 @@
 "use client";
 
 import Image from "next/image";
+import { ExternalLink } from "lucide-react";
 import type { KeyboardEvent, RefObject } from "react";
 import { PROJECTS } from "../portfolio-data";
 import { aboutHeadingClass, aboutLabelClass } from "./section-styles";
 import { usePortfolioCursor } from "./portfolio-cursor-context";
+
+const GITHUB_REPOS_URL = "https://github.com/repos";
+
+const viewMoreCardClass =
+  "group/viewmore flex min-h-[70vh] min-w-[clamp(340px,45vw,600px)] shrink-0 flex-col items-center justify-center gap-6 border border-[var(--border-subtle)] bg-[color-mix(in_oklab,var(--foreground)_3%,var(--background))] px-10 transition-[border-color,transform] duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)] hover:scale-[0.97] hover:border-[var(--accent)] max-md:cursor-pointer";
+
+const viewMoreBtnClass =
+  "inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--background)] px-8 py-3 text-sm font-medium uppercase tracking-[2px] text-[var(--foreground)] shadow-sm transition-all duration-300 hover:border-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--selection-fg)] active:scale-[0.98]";
 
 type ProjectsSectionProps = {
   hScrollRef: RefObject<HTMLElement | null>;
@@ -117,6 +126,26 @@ export default function ProjectsSection({
                 </div>
               </div>
             ))}
+            <a
+              href={GITHUB_REPOS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={viewMoreCardClass}
+              aria-label="View more projects on GitHub (opens in new tab)"
+              onMouseEnter={() => setCursor("visit")}
+              onMouseLeave={resetCursor}
+            >
+              <span className="font-portfolio-mono text-xs uppercase tracking-[3px] text-[var(--muted)]">
+                Repository
+              </span>
+              <p className="max-w-[280px] text-center text-[clamp(22px,3vw,32px)] font-bold leading-tight tracking-[-0.5px] text-[var(--foreground)]">
+                More on <span className="text-[var(--accent)]">GitHub</span>
+              </p>
+              <span className={viewMoreBtnClass}>
+                <ExternalLink className="size-[18px] shrink-0" aria-hidden />
+                View more
+              </span>
+            </a>
           </div>
         </div>
       </section>

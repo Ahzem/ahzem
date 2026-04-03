@@ -19,7 +19,8 @@ export default function HeroSection({
 
   return (
     <section
-      className="relative flex h-screen flex-col justify-center overflow-hidden px-[clamp(24px,5vw,80px)]"
+      id="hero"
+      className="relative flex h-screen flex-col justify-center overflow-hidden px-[clamp(24px,5vw,80px)] text-[#f0ece2]"
       ref={sectionRef}
     >
       <div
@@ -42,6 +43,7 @@ export default function HeroSection({
             delay={0.5}
             className={heroNameClass}
             style={{
+              color: "#f0ece2",
               WebkitTextFillColor: "#f0ece2",
             }}
           />
@@ -60,7 +62,7 @@ export default function HeroSection({
         </div>
         <div className="overflow-hidden">
           <div
-            className="mt-6 text-[clamp(14px,2vw,20px)] font-light uppercase tracking-[4px] text-[#888] transition-all duration-[800ms] ease-[cubic-bezier(0.19,1,0.22,1)] [transition-delay:1.4s]"
+            className="mt-6 text-[clamp(14px,2vw,20px)] font-light uppercase tracking-[4px] text-[#a3a3a3] transition-all duration-[800ms] ease-[cubic-bezier(0.19,1,0.22,1)] [transition-delay:1.4s]"
             style={{
               opacity: show ? 1 : 0,
               transform: show ? "translateY(0)" : "translateY(100%)",
@@ -76,7 +78,7 @@ export default function HeroSection({
         className="absolute bottom-10 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 transition-opacity duration-1000 [transition-delay:2s]"
         style={{ opacity: show ? 1 : 0 }}
       >
-        <span className="text-[10px] uppercase tracking-[3px] text-[#444]">
+        <span className="text-[10px] uppercase tracking-[3px] text-white/45">
           Scroll
         </span>
         <div className="h-[60px] w-px animate-scroll-pulse bg-gradient-to-b from-[#c9f31d] to-transparent" />
