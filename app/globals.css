@@ -16,6 +16,16 @@
   --border-subtle: rgb(0 0 0 / 8%);
   --surface-elevated: #ffffff;
   --counter-idle-stroke: rgb(0 0 0 / 14%);
+  /* skills-section caution tapes */
+  --tape-bright-bg: #c9f31d;
+  --tape-bright-fg: #0c0c0c;
+  --tape-bright-border: rgb(0 0 0 / 18%);
+  --tape-contrast-bg: #111111;
+  --tape-contrast-fg: #c9f31d;
+  --tape-contrast-border: rgb(201 243 29 / 30%);
+  --tape-icon-shadow: drop-shadow(0 1px 3px rgb(0 0 0 / 30%));
+  --tape-shadow-bright: 0 4px 24px -8px rgb(201 243 29 / 20%);
+  --tape-shadow-contrast: 0 4px 32px -8px rgb(0 0 0 / 50%);
 }
 
 .dark {
@@ -29,6 +39,16 @@
   --border-subtle: rgb(255 255 255 / 6%);
   --surface-elevated: #121212;
   --counter-idle-stroke: rgb(255 255 255 / 12%);
+  /* Tapes: same lime; contrast strip slightly lifted off page bg for separation */
+  --tape-bright-bg: #c9f31d;
+  --tape-bright-fg: #0c0c0c;
+  --tape-bright-border: rgb(0 0 0 / 25%);
+  --tape-contrast-bg: #161616;
+  --tape-contrast-fg: #c9f31d;
+  --tape-contrast-border: rgb(201 243 29 / 40%);
+  --tape-icon-shadow: drop-shadow(0 1px 3px rgb(0 0 0 / 45%));
+  --tape-shadow-bright: 0 4px 32px -10px rgb(201 243 29 / 18%);
+  --tape-shadow-contrast: 0 4px 40px -12px rgb(0 0 0 / 65%);
 }
 
 @theme {

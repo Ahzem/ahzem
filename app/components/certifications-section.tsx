@@ -1,10 +1,17 @@
 "use client";
 
 import Image from "next/image";
+import { ExternalLink } from "lucide-react";
 import type { RefObject } from "react";
 import { CERTIFICATIONS } from "../portfolio-data";
 import { aboutHeadingClass, aboutLabelClass } from "./section-styles";
 import { usePortfolioCursor } from "./portfolio-cursor-context";
+
+const LINKEDIN_CERTIFICATIONS =
+  "https://www.linkedin.com/in/ahzem/details/certifications/";
+
+const viewMoreBtnClass =
+  "inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--background)] px-8 py-3 text-sm font-medium uppercase tracking-[2px] text-[var(--foreground)] shadow-sm transition-all duration-300 hover:border-[#c9f31d] hover:bg-[#c9f31d] hover:text-[#0c0c0c] active:scale-[0.98]";
 
 type CertificationsSectionProps = {
   sectionRef: RefObject<HTMLElement | null>;
@@ -107,6 +114,28 @@ export default function CertificationsSection({
             </div>
           );
         })}
+      </div>
+
+      <div
+        className="mt-14 flex justify-center"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "translateY(0)" : "translateY(16px)",
+          transition: `opacity 0.55s ease-out ${0.35 + CERTIFICATIONS.length * 0.06}s, transform 0.55s ease-out ${0.35 + CERTIFICATIONS.length * 0.06}s`,
+        }}
+      >
+        <a
+          href={LINKEDIN_CERTIFICATIONS}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={viewMoreBtnClass}
+          aria-label="View all certifications on LinkedIn (opens in new tab)"
+          onMouseEnter={() => setCursor("visit")}
+          onMouseLeave={resetCursor}
+        >
+          <ExternalLink className="size-[18px] shrink-0" aria-hidden />
+          View more
+        </a>
       </div>
     </section>
   );

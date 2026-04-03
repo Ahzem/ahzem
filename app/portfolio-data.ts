@@ -290,13 +290,13 @@ export const EDUCATION: EducationEntry[] = [
     institution: "BD/Al-Yaseen Muslim Vidyalaya",
     degree: "Ordinary Level",
     field: null,
-    location: "Sri Lanka",
+    location: "Bandarawela, Sri Lanka",
     grade: "Pass",
     activities: [
-      "Head Prefect (2017)",
+      "Prefect (2017)",
       "Member of Students Parliament (2015–2017)",
     ],
-    modules: null,
+    modules: ["English", "Tamil", "Mathematics", "Science", "History", "Religion", "Art", "Second Language (Sinhala)", "Health & Science"],
     note: null,
     color: "#06b6d4",
   },
@@ -411,56 +411,84 @@ export const CERTIFICATIONS: Certification[] = [
     issuer: "GitHub",
     date: "2024",
     link: "https://www.credly.com/go/aIhQdSVK",
-    image: "https://images.credly.com/size/340x340/images/024d0122-724d-4c5a-bd83-cfe3c4b7a073/image.png"
+    image: "/certifications/GitHub Foundations - GitHub.webp"
   },
   {
     name: "JavaScript Essential Training",
     issuer: "LinkedIn Learning",
     date: "2023",
     link: "https://www.linkedin.com/learning/certificates/286e332a59cede041e7c52542cb4529e4f9582ac0c65d1248f31b21db91b4614",
-    image: "https://media.licdn.com/dms/image/v2/D4D22AQH5elGnyGJ6Fw/feedshare-shrink_1280/feedshare-shrink_1280/0/1720404328766?e=1774978755&v=beta&t=qc_MCbHsHUH7ovW81vpdjpQEuhF-CI9N4bX3nbiyzVQ"
+    image: "/certifications/JavaScript Essential Training - LinkedIn.webp"
+  },
+  {
+    name: "Introduction to Agentic AI",
+    issuer: "LinkedIn Learning",
+    date: "2023",
+    link: "https://www.linkedin.com/learning/certificates/9da8b4f41c04dd2d1e30db7ec0392e8a2960a949dcc774239faec890addf875f",
+    image: "/certifications/Introduction to Agentic AI Getting Started with AutoGen Studio - LinkedIn.webp"
   },
   {
     name: "Postman Student Expert",
     issuer: "Postman",
     date: "2023",
     link: "https://api.badgr.io/public/assertions/zM_0cp_cQkitK2YJc654sw?identity__email=muhammadhahzem1422@gmail.com",
-    image: "https://api.badgr.io/public/assertions/zM_0cp_cQkitK2YJc654sw/image"
+    image: "/certifications/Postman Student Expert - Postman.webp"
   },
   {
     name: "Foundations of UX Design",
     issuer: "Google",
     date: "2023",
-    link: "",
-    image: ""
+    link: "https://coursera.org/verify/J76UTYSRXEZA",
+    image: "/certifications/Foundations of User Experience (UX) Design - Google.webp"
   },
   {
     name: "Build Wireframes & Prototypes",
     issuer: "Google",
     date: "2023",
-    link: "",
-    image: ""
+    link: "https://icoursera.org/verify/9NUY77X7HYEQ",
+    image: "/certifications/Build Wireframes and Low Fidelity Prototypes - Google.webp"
   },
   {
     name: "UX Design Process",
     issuer: "Google",
     date: "2023",
-    link: "",
-    image: ""
+    link: "https://coursera.org/verify/U86NEH6QLLWW",
+    image: "/certifications/Start the UX Design Process Empathize Define and Ideate - Google.webp"
   },
   {
-    name: "Python, SQL, Java",
-    issuer: "Provider",
-    date: "2022",
-    link: "",
-    image: ""
+    name: "Get Started with Figma",
+    issuer: "Coursera",
+    date: "2023",
+    link: "https://www.coursera.org/account/accomplishments/records/VWJB59H6ZFBL",
+    image: "/certifications/Get Started with Figma - Coursera.webp"
+  },
+  {
+    name: "Introduction to Python",
+    issuer: "365 Data Science",
+    date: "2023",
+    link: "https://learn.365datascience.com/c/4b3b9d255f",
+    image: "/certifications/Introduction to Python - 365 Data Science.webp"
+  },
+  {
+    name: "JavaScript Intermediate",
+    issuer: "SoloLearn",
+    date: "2023",
+    link: "https://www.sololearn.com/certificates/CC-2FAQYFXS",
+    image: "/certifications/JavaScript Intro & Intermediate -  Sololearn.webp"
+  },
+  {
+    name: "Java Intermediate",
+    issuer: "Sololearn",
+    date: "2023",
+    link: "https://www.sololearn.com/certificates/CC-HIKNGOUD",
+    image: "/certifications/Java Intro & Intermediate - Sololearn.webp"
   },
   {
     name: "C Programming Basics",
-    issuer: "Provider",
-    date: "2022",
-    link: "",
-    image: ""
+    issuer: "Udemy",
+    date: "2023",
+    link: "ude.my/UC-fb7a490d-2c5e-4279-a15e-8e6775dcad3c",
+    image: "/certifications/C Programming The Basics - Udemy.webp"
   }
 ];
 
@@ -567,7 +595,7 @@ export const TESTIMONIALS: Testimonial[] = [
   {
     name: "Mewan Jayathilake",
     role: "Lecturer — CS & Software Engineering, ITUM",
-    relation: "Direct Manager",
+    relation: "Lecturer",
     quote: "One of my most exceptional undergraduate students. He stood out distinctly with his commitment to excellence, self-motivation, and admirable attitude. A standout candidate who I am confident will excel in any opportunity.",
     highlight: "most exceptional",
     avatar: "MJ",
@@ -576,7 +604,7 @@ export const TESTIMONIALS: Testimonial[] = [
   {
     name: "Dileepa Bandara",
     role: "Associate AI Engineer · Gold MSA (Alumni)",
-    relation: "Teammate",
+    relation: "Mentor - MLSA",
     quote: "A good team member in the Microsoft Learn Student Ambassadors — Sri Lanka community. He contributed to organizing events like the MS Build After Party, bringing creative ideas and helping ensure everything ran smoothly.",
     highlight: "creative ideas",
     avatar: "DB",
@@ -585,7 +613,7 @@ export const TESTIMONIALS: Testimonial[] = [
   {
     name: "Raveen Amarasinghe",
     role: "General Manager — Oculus International",
-    relation: "Mentor",
+    relation: "Mentor - ZeroPlastic NDT",
     quote: "Ahzem handled social media tasks effectively and proved to be a valuable volunteer, bringing enthusiasm and dedication to his role. His work helped drive engagement and spread awareness about ZeroPlastic NDT's mission.",
     highlight: "valuable volunteer",
     avatar: "RA",
@@ -594,7 +622,7 @@ export const TESTIMONIALS: Testimonial[] = [
   {
     name: "Diluksha Perera",
     role: "Associate Data Engineer · GOLD MSA",
-    relation: "Teammate",
+    relation: "Teammate - MLSA",
     quote: "Instrumental in our projects, often stepping up to take on key responsibilities with enthusiasm. His collaborative spirit and positive attitude have helped create an inspiring environment where everyone feels motivated.",
     highlight: "collaborative spirit",
     avatar: "DP",
