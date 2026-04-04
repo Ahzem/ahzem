@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { VOLUNTEER, type VolunteerEntry } from "../portfolio-data";
 import { useReveal } from "../hooks/use-reveal";
+import MediaImage from "./media-image";
 import { aboutHeadingClass, aboutLabelClass } from "./section-styles";
 
 const CATEGORIES = [
@@ -102,11 +102,12 @@ function VolCard({
       {/* Header: logo + category badge */}
       <div className="flex items-start justify-between gap-3 pl-3">
         <div className="relative h-10 w-10 shrink-0 transition-transform duration-300 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-110">
-          <Image
+          <MediaImage
             src={v.logo}
             alt={v.org}
             fill
             sizes="40px"
+            media={{ width: 96, height: 96 }}
             className="object-contain grayscale-[0.25] transition-[filter] duration-300 group-hover:grayscale-0"
           />
         </div>

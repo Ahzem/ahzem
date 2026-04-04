@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { ExternalLink } from "lucide-react";
 import type { KeyboardEvent, RefObject } from "react";
 import { PROJECTS } from "../portfolio-data";
+import MediaImage from "./media-image";
 import { aboutHeadingClass, aboutLabelClass } from "./section-styles";
 import { usePortfolioCursor } from "./portfolio-cursor-context";
 
@@ -79,7 +79,7 @@ export default function ProjectsSection({
                   handleProjectKeyDown(event, project.link)
                 }
               >
-                <Image
+                <MediaImage
                   src={project.image}
                   alt={`${project.title} preview`}
                   fill

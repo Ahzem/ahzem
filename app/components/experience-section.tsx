@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import type { RefObject } from "react";
 import { EXPERIENCES } from "../portfolio-data";
+import MediaImage from "./media-image";
 import { aboutHeadingClass, aboutLabelClass } from "./section-styles";
 import { usePortfolioCursor } from "./portfolio-cursor-context";
 
@@ -64,12 +64,13 @@ export default function ExperienceSection({
             <div className="flex flex-col">
               <div className="flex items-center gap-4">
                 {item.logo && (
-                  <Image
+                  <MediaImage
                     src={item.logo}
                     alt={item.company}
                     className="h-10 w-10 rounded-md object-contain"
                     width={40}
                     height={40}
+                    media={{ width: 128, height: 128 }}
                   />
                 )}
                 <div className="text-[28px] font-bold tracking-[-0.5px]">

@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { ExternalLink } from "lucide-react";
 import type { RefObject } from "react";
 import { CERTIFICATIONS } from "../portfolio-data";
+import MediaImage from "./media-image";
 import { aboutHeadingClass, aboutLabelClass } from "./section-styles";
 import { usePortfolioCursor } from "./portfolio-cursor-context";
 
@@ -96,11 +96,12 @@ export default function CertificationsSection({
               </div>
               <div className="mt-2 flex aspect-[16/10] w-full overflow-hidden rounded bg-[var(--border-subtle)]">
                 {cert.image ? (
-                  <Image
+                  <MediaImage
                     src={cert.image}
                     alt={cert.name}
                     width={400}
                     height={250}
+                    media={{ width: 800, height: 500 }}
                     className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                   />
                 ) : (
