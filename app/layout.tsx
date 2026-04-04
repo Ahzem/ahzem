@@ -1,6 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import JsonLd from "./components/json-ld";
 import { ThemeProvider } from "./components/theme-provider";
+import { buildRootMetadata } from "@/lib/seo-metadata";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,10 +15,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Muhammadh Ahzem | Portfolio",
-  description:
-    "Portfolio of Muhammadh Ahzem — Software Engineer focused on AI integration and full-stack development.",
+export const metadata: Metadata = buildRootMetadata();
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#0c0c0c" },
+    { media: "(prefers-color-scheme: light)", color: "#f5f4f0" },
+  ],
+  colorScheme: "dark light",
 };
 
 export default function RootLayout({
@@ -34,6 +40,7 @@ export default function RootLayout({
         className={`${geistSans.variable} min-h-full flex flex-col bg-background font-portfolio text-foreground overflow-x-hidden cursor-none selection:bg-[var(--selection-bg)] selection:text-[var(--selection-fg)] [&::-webkit-scrollbar]:w-0 max-md:cursor-auto max-md:[&_a]:cursor-pointer max-md:[&_button]:cursor-pointer`}
         suppressHydrationWarning
       >
+        <JsonLd />
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
