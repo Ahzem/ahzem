@@ -1,7 +1,22 @@
 "use client";
 
+import { Press_Start_2P } from "next/font/google";
 import { useTheme } from "next-themes";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
+const pressStart2P = Press_Start_2P({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+/** Pixel-style wordmark size for viewBox 720×180 */
+const PRELOADER_WORD_STYLE = {
+  fontSize: 64,
+  fontFamily: pressStart2P.style.fontFamily,
+  letterSpacing: "0.08em",
+} as const;
+
+const PRELOADER_WORD_Y = 124;
 
 type PreloaderProps = {
   loaded: boolean;
@@ -156,7 +171,7 @@ export default function Preloader({ loaded, onHidden }: PreloaderProps) {
 
   return (
     <div
-      className={`fixed inset-0 z-[10100] flex flex-col items-center justify-center overflow-hidden transition-all duration-1000 ${
+      className={`${pressStart2P.className} fixed inset-0 z-[10100] flex flex-col items-center justify-center overflow-hidden transition-all duration-1000 ${
         exit ? "pointer-events-none scale-110 opacity-0" : "scale-100 opacity-100"
       }`}
       style={{ backgroundColor: theme.bg }}
@@ -170,13 +185,11 @@ export default function Preloader({ loaded, onHidden }: PreloaderProps) {
         }}
       />
 
-      <div
-        className={`absolute top-6 left-8 text-[11px] font-semibold tracking-[3px] uppercase ${theme.label}`}
-      >
+      <div className={`absolute top-6 left-8 text-[10px] tracking-[0.2em] uppercase ${theme.label}`}>
         Portfolio
       </div>
 
-      <div className={`absolute top-6 right-8 text-[11px] font-mono tracking-[3px] uppercase ${theme.loading}`}>
+      <div className={`absolute top-6 right-8 text-[10px] tracking-[0.2em] uppercase ${theme.loading}`}>
         {done ? "Ready" : "Loading"}
         <span className={`ml-0.5 animate-pulse ${theme.loadingDot}`}>.</span>
       </div>
@@ -203,17 +216,7 @@ export default function Preloader({ loaded, onHidden }: PreloaderProps) {
           </clipPath>
 
           <clipPath id="textClip">
-            <text
-              x="360"
-              y="140"
-              textAnchor="middle"
-              style={{
-                fontSize: 138,
-                fontFamily: "'Space Grotesk', sans-serif",
-                fontWeight: 900,
-                letterSpacing: "4px",
-              }}
-            >
+            <text x="360" y={PRELOADER_WORD_Y} textAnchor="middle" style={PRELOADER_WORD_STYLE}>
               AHZEM
             </text>
           </clipPath>
@@ -221,17 +224,12 @@ export default function Preloader({ loaded, onHidden }: PreloaderProps) {
 
         <text
           x="360"
-          y="140"
+          y={PRELOADER_WORD_Y}
           textAnchor="middle"
           fill="none"
           stroke={theme.outline}
           strokeWidth="1"
-          style={{
-            fontSize: 138,
-            fontFamily: "'Space Grotesk', sans-serif",
-            fontWeight: 900,
-            letterSpacing: "4px",
-          }}
+          style={PRELOADER_WORD_STYLE}
         >
           AHZEM
         </text>
@@ -290,17 +288,14 @@ export default function Preloader({ loaded, onHidden }: PreloaderProps) {
         {done && (
           <text
             x="360"
-            y="140"
+            y={PRELOADER_WORD_Y}
             textAnchor="middle"
             fill="none"
             stroke={theme.fillMid}
             strokeWidth="0.5"
             opacity="0.3"
             style={{
-              fontSize: 138,
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontWeight: 900,
-              letterSpacing: "4px",
+              ...PRELOADER_WORD_STYLE,
               filter: "blur(8px)",
               transition: "opacity 0.5s",
             }}
@@ -312,12 +307,12 @@ export default function Preloader({ loaded, onHidden }: PreloaderProps) {
 
       <div className="relative z-10 mt-10 flex items-baseline gap-1">
         <span
-          className="font-mono text-sm tracking-widest transition-colors duration-300"
+          className="text-sm tracking-[0.2em] transition-colors duration-300"
           style={{ color: done ? theme.progressOn : theme.progressOff }}
         >
           {String(progress).padStart(3, "0")}
         </span>
-        <span className="font-mono text-xs" style={{ color: theme.progressUnit }}>
+        <span className="text-xs tracking-[0.15em]" style={{ color: theme.progressUnit }}>
           %
         </span>
       </div>
