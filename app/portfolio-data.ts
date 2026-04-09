@@ -596,6 +596,8 @@ export type Service = {
   desc: string;
   tags: string[];
   icon: ServiceIconId;
+  /** Hover preview — logical media key for `buildMediaUrl` (same as projects). */
+  image: string;
 };
 
 export const SERVICES: Service[] = [
@@ -605,6 +607,7 @@ export const SERVICES: Service[] = [
     desc: "End-to-end web applications built with React, Next.js, Node.js, and NestJS — from architecture to deployment on AWS.",
     tags: ["React", "Next.js", "Node.js", "AWS"],
     icon: "code2",
+    image: "osdem-dfec-webapp.webp",
   },
   {
     num: "02",
@@ -612,6 +615,7 @@ export const SERVICES: Service[] = [
     desc: "Cross-platform mobile applications using Flutter with native-grade performance, backend integration, and app store deployment.",
     tags: ["Flutter", "Dart", "REST APIs", "Firebase"],
     icon: "smartphone",
+    image: "seyoni.webp",
   },
   {
     num: "03",
@@ -619,6 +623,7 @@ export const SERVICES: Service[] = [
     desc: "Intelligent workflow automation using AI agents, chatbots, and voice assistants — replacing manual processes with smart systems.",
     tags: ["CrewAI", "n8n", "VAPI", "Python"],
     icon: "bot",
+    image: "inprint.webp",
   },
   {
     num: "04",
@@ -626,6 +631,7 @@ export const SERVICES: Service[] = [
     desc: "Complete business web presence with custom design, on-page SEO, Google Analytics, Search Console, and search engine indexing.",
     tags: ["SEO", "GA4", "Performance", "Responsive"],
     icon: "globe",
+    image: "chester.webp",
   },
   {
     num: "05",
@@ -633,6 +639,7 @@ export const SERVICES: Service[] = [
     desc: "Custom software solutions to digitize operations — from institutional management systems to CRM integrations and data synchronization.",
     tags: ["SaaS", "CRM", "PostgreSQL", "Docker"],
     icon: "zap",
+    image: "gavel.webp",
   },
   {
     num: "06",
@@ -640,6 +647,7 @@ export const SERVICES: Service[] = [
     desc: "Data-driven digital presence strategies including social media management, content optimization, and analytics-backed growth.",
     tags: ["Analytics", "Content", "Social", "Strategy"],
     icon: "trendingUp",
+    image: "busify.webp",
   },
 ];
 
