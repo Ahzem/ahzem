@@ -43,18 +43,29 @@ export default function ContactSection({ sectionRef, visible }: ContactSectionPr
             transition: "all 0.6s 0.1s",
           }}
         >
-          Contact
+          Muhammadh Ahzem
         </div>
         <div
-          className="mb-8 text-[clamp(32px,12vw,120px)] font-bold leading-[0.95] tracking-[-2px] max-md:tracking-[-1px] md:mb-10 md:leading-none md:tracking-[-3px]"
+          className="mb-4 text-[clamp(32px,12vw,120px)] font-bold leading-[0.95] tracking-[-2px] max-md:tracking-[-1px] md:mb-6 md:leading-none md:tracking-[-3px]"
           style={{
             opacity: visible ? 1 : 0,
             transform: visible ? "translateY(0)" : "translateY(50px)",
             transition: "all 0.8s cubic-bezier(.19,1,.22,1) 0.2s",
           }}
         >
-          LET&apos;S <span className="text-[var(--accent)]">TALK</span>
+          <span className="text-[var(--accent)]">AHZEM</span>
+          <span className="text-[var(--foreground)]">.DEV</span>
         </div>
+        <p
+          className="mx-auto mb-8 max-w-[480px] text-sm leading-7 text-[var(--muted)] md:mb-10 md:text-base"
+          style={{
+            opacity: visible ? 1 : 0,
+            transition: "all 0.7s 0.35s",
+          }}
+        >
+          Full-stack engineer · open-source contributor · available for new
+          opportunities.
+        </p>
 
         <div
           className="mx-auto mb-10 flex w-full max-w-md flex-col gap-3 sm:mb-14 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4"

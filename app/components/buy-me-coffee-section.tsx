@@ -1,8 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import { aboutLabelClass } from "./section-styles";
 import { usePortfolioCursor } from "./portfolio-cursor-context";
+import TerminalContactForm from "./terminal-contact-form";
 
 const buyMeACoffeeUrl = "https://buymeacoffee.com/ahzem";
 
@@ -27,52 +29,147 @@ function CoffeeIcon() {
   );
 }
 
+const CARDS = [
+  {
+    label: "Support",
+    title: "Buy me a coffee",
+    desc: "If my work, open-source, or content helps you, consider supporting me. Thank you for helping me keep building.",
+  },
+  {
+    label: "Contact",
+    title: "Say hello",
+    desc: "Have a project in mind or just want to connect? Drop a message right here — I'll get back to you.",
+  },
+] as const;
+
 export default function BuyMeCoffeeSection() {
   const { setCursor, resetCursor } = usePortfolioCursor();
+  const [active, setActive] = useState(0);
+  const cardRefs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
+
+  useEffect(() => {
+    const observers = cardRefs.map((ref, i) => {
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActive(i); },
+        { threshold: 0.4 },
+      );
+      if (ref.current) obs.observe(ref.current);
+      return obs;
+    });
+    return () => observers.forEach((o) => o.disconnect());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <section className="px-[clamp(16px,5vw,80px)] py-16 md:py-20">
-      <div className="mx-auto max-w-[1100px] border border-[var(--border-subtle)] bg-[color-mix(in_oklab,var(--background)_92%,var(--foreground))] p-6 md:p-10">
-        <p className={aboutLabelClass}>Support</p>
-        <div className="grid gap-7 md:grid-cols-[1fr_auto] md:items-center md:gap-10">
-          <div>
-            <h3 className="text-[clamp(24px,4vw,38px)] font-bold tracking-[-1px] text-[var(--foreground)]">
-              Buy me a coffee
-            </h3>
-            <p className="mt-3 max-w-[620px] text-sm leading-7 text-[var(--muted)] md:text-base">
-              If my work, open-source, or content helps you, you can support me with
-              a coffee. Thank you for helping me keep building and sharing.
-            </p>
-            <a
-              href={buyMeACoffeeUrl}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="mt-6 inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] px-5 py-2.5 text-xs font-semibold uppercase tracking-[2px] text-[var(--foreground)] transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)] md:text-sm"
-              onMouseEnter={() => setCursor("open")}
-              onMouseLeave={resetCursor}
-            >
-              <CoffeeIcon />
-              Buy Me a Coffee
-            </a>
-          </div>
+    <section className="px-[clamp(16px,5vw,80px)] py-20">
+      <div className="mx-auto max-w-[1100px]">
+        <div className="flex flex-col gap-16 lg:flex-row lg:gap-20">
 
-          <a
-            href={buyMeACoffeeUrl}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="mx-auto block border border-[var(--border-subtle)] p-2 transition-colors hover:border-[var(--accent)] md:mx-0"
-            onMouseEnter={() => setCursor("open")}
-            onMouseLeave={resetCursor}
-            aria-label="Open Buy Me a Coffee page"
-          >
-            <Image
-              src="/buymecofee/qr-code.png"
-              alt="Buy Me a Coffee QR code"
-              width={170}
-              height={170}
-              className="h-[150px] w-[150px] md:h-[170px] md:w-[170px]"
-            />
-          </a>
+          {/* ── Left sticky sidebar (desktop only) ── */}
+          <aside className="hidden lg:block lg:w-[240px] shrink-0">
+            <div className="sticky top-[28vh] space-y-0">
+              <p className={`${aboutLabelClass} mb-8`}>Get in touch</p>
+
+              {CARDS.map((card, i) => (
+                <div key={i} className="flex gap-5">
+                  {/* Timeline track */}
+                  <div className="flex flex-col items-center">
+                    <span
+                      className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full border-2 transition-all duration-500"
+                      style={{
+                        borderColor: active === i ? "var(--accent)" : "var(--border-subtle)",
+                        backgroundColor: active === i ? "var(--accent)" : "transparent",
+                      }}
+                    />
+                    {i < CARDS.length - 1 && (
+                      <span
+                        className="mt-2 w-px flex-1 min-h-[80px] transition-colors duration-500"
+                        style={{
+                          backgroundColor:
+                            active > i ? "var(--accent)" : "var(--border-subtle)",
+                        }}
+                      />
+                    )}
+                  </div>
+
+                  {/* Text */}
+                  <div
+                    className="pb-10 transition-opacity duration-500"
+                    style={{ opacity: active === i ? 1 : 0.35 }}
+                  >
+                    <p className="text-[10px] uppercase tracking-[2.5px] text-[var(--muted)]">
+                      {card.label}
+                    </p>
+                    <h3 className="mt-1 text-base font-semibold text-[var(--foreground)]">
+                      {card.title}
+                    </h3>
+                    <p className="mt-2 text-xs leading-5 text-[var(--muted)]">
+                      {card.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </aside>
+
+          {/* ── Right scrolling cards ── */}
+          <div className="flex flex-1 flex-col gap-16">
+
+            {/* Card 1 — Buy Me a Coffee */}
+            <div
+              ref={cardRefs[0]}
+              className="border border-[var(--border-subtle)] bg-[color-mix(in_oklab,var(--background)_92%,var(--foreground))] p-6 md:p-10"
+            >
+              <p className={`${aboutLabelClass} lg:hidden`}>Support</p>
+              <div className="grid gap-7 md:grid-cols-[1fr_auto] md:items-center md:gap-10">
+                <div>
+                  <h3 className="text-[clamp(22px,3.5vw,34px)] font-bold tracking-[-1px] text-[var(--foreground)]">
+                    Buy me a coffee
+                  </h3>
+                  <p className="mt-3 max-w-[540px] text-sm leading-7 text-[var(--muted)] md:text-base">
+                    If my work, open-source, or content helps you, you can support me with
+                    a coffee. Thank you for helping me keep building and sharing.
+                  </p>
+                  <a
+                    href={buyMeACoffeeUrl}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="mt-6 inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] px-5 py-2.5 text-xs font-semibold uppercase tracking-[2px] text-[var(--foreground)] transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)] md:text-sm"
+                    onMouseEnter={() => setCursor("open")}
+                    onMouseLeave={resetCursor}
+                  >
+                    <CoffeeIcon />
+                    Buy Me a Coffee
+                  </a>
+                </div>
+
+                <a
+                  href={buyMeACoffeeUrl}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="mx-auto block border border-[var(--border-subtle)] p-2 transition-colors hover:border-[var(--accent)] md:mx-0"
+                  onMouseEnter={() => setCursor("open")}
+                  onMouseLeave={resetCursor}
+                  aria-label="Open Buy Me a Coffee page"
+                >
+                  <Image
+                    src="/buymecofee/qr-code.png"
+                    alt="Buy Me a Coffee QR code"
+                    width={170}
+                    height={170}
+                    className="h-[150px] w-[150px] md:h-[170px] md:w-[170px]"
+                  />
+                </a>
+              </div>
+            </div>
+
+            {/* Card 2 — Terminal Contact Form */}
+            <div ref={cardRefs[1]}>
+              <p className={`${aboutLabelClass} mb-4 lg:hidden`}>Contact</p>
+              <TerminalContactForm />
+            </div>
+
+          </div>
         </div>
       </div>
     </section>
