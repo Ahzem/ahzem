@@ -52,6 +52,10 @@ export default function Home() {
   const [contactRef, contactVis] = useReveal<HTMLElement>(0.1);
 
   useEffect(() => {
+    // Prevent the browser from restoring a previous scroll position on revisit
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+
     const timer = window.setTimeout(() => setLoaded(true), 300);
     return () => window.clearTimeout(timer);
   }, []);
