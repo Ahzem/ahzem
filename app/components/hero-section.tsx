@@ -1,8 +1,8 @@
 "use client";
 
 import type { RefObject } from "react";
+import { FlipHoverText } from "./flip-hover-text";
 import { heroNameClass } from "./section-styles";
-import { SplitText } from "./split-text";
 
 type HeroSectionProps = {
   sectionRef: RefObject<HTMLElement | null>;
@@ -38,10 +38,10 @@ export default function HeroSection({
       />
       <div className="relative z-10 w-full max-w-7xl">
         <div className="overflow-hidden leading-none">
-          <SplitText
+          <FlipHoverText
             text="MUHAMMADH"
             visible={show}
-            delay={0.5}
+            revealDelay={0.5}
             className={heroNameClass}
             style={{
               color: "#f0ece2",
@@ -50,10 +50,10 @@ export default function HeroSection({
           />
         </div>
         <div className="overflow-hidden leading-none">
-          <SplitText
+          <FlipHoverText
             text="AHZEM"
             visible={show}
-            delay={0.8}
+            revealDelay={0.8}
             className={heroNameClass}
             style={{
               WebkitTextStroke: "1.5px #f0ece2",

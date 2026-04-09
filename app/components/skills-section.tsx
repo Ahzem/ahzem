@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef } from "react";
 import type { RefObject } from "react";
 import {
@@ -9,99 +8,53 @@ import {
   SKILLS_RIGHT,
 } from "../portfolio-data";
 import { aboutHeadingClass, aboutLabelClass } from "./section-styles";
-import {
-  ICONS8_TOOLKIT,
-  icons8ToolkitPngUrl,
-} from "./icons8-toolkit-data";
+import ToolkitIcon from "./toolkit-icon";
 
 type SkillsSectionProps = {
   sectionRef: RefObject<HTMLElement | null>;
   visible: boolean;
 };
 
-type TapeVariant = "bright" | "contrast";
-
-// Three tape bands — colors from globals.css (--tape-*) so light / .dark themes match
-const TAPES: readonly {
+const RIBBONS: readonly {
   items: readonly string[];
   dir: 1 | -1;
   speed: number;
-  variant: TapeVariant;
+  rotateDeg: number;
+  offsetY: number;
 }[] = [
   {
     items: [...SKILLS_LEFT, ...SKILLS_CENTER],
     dir: 1,
-    speed: 0.55,
-    variant: "bright",
+    speed: 0.64,
+    rotateDeg: -7,
+    offsetY: -22,
   },
   {
     items: [...SKILLS_RIGHT, ...SKILLS_LEFT],
     dir: -1,
-    speed: 0.42,
-    variant: "contrast",
-  },
-  {
-    items: [...SKILLS_CENTER, ...SKILLS_RIGHT],
-    dir: 1,
-    speed: 0.68,
-    variant: "bright",
+    speed: 0.5,
+    rotateDeg: 7,
+    offsetY: 22,
   },
 ];
 
-const ROTATE = -4; // degrees — same angle for all bands
+const RIBBON_WIDTH_PCT = 150;
 
-/** Wider than viewport so rotation never shows gaps; centered with negative margin */
-const TAPE_BAND_WIDTH_PCT = 135;
-const TAPE_ICON_PX = 36;
-
-/** Icon from icons8 CDN (96px source — crisp at 36×36 display size) */
-function TapeIcon({ skill, onDark }: { skill: string; onDark: boolean }) {
-  const entry = ICONS8_TOOLKIT[skill];
-  if (!entry) return null;
-  const s = TAPE_ICON_PX;
-  return (
-    <Image
-      src={icons8ToolkitPngUrl(entry)}
-      alt=""
-      width={s}
-      height={s}
-      unoptimized
-      className="shrink-0 object-contain"
-      style={{
-        width: s,
-        height: s,
-        filter: onDark ? "none" : "var(--tape-icon-shadow)",
-      }}
-    />
-  );
-}
-
-function TapeBand({
+function RibbonBand({
   items,
   dir,
   speed,
-  variant,
+  rotateDeg,
+  offsetY,
   velRef,
 }: {
   items: readonly string[];
   dir: 1 | -1;
   speed: number;
-  variant: TapeVariant;
+  rotateDeg: number;
+  offsetY: number;
   velRef: { current: number };
 }) {
-  const onDark = variant === "contrast";
-  const fgVar =
-    variant === "bright" ? "var(--tape-bright-fg)" : "var(--tape-contrast-fg)";
-  const bgVar =
-    variant === "bright" ? "var(--tape-bright-bg)" : "var(--tape-contrast-bg)";
-  const borderVar =
-    variant === "bright"
-      ? "var(--tape-bright-border)"
-      : "var(--tape-contrast-border)";
-  const shadowVar =
-    variant === "bright"
-      ? "var(--tape-shadow-bright)"
-      : "var(--tape-shadow-contrast)";
   const trackRef = useRef<HTMLDivElement>(null);
   const xRef = useRef(0);
 
@@ -109,7 +62,6 @@ function TapeBand({
     const track = trackRef.current;
     if (!track) return;
 
-    // Stagger right-moving rows so adjacent bands don't mirror exactly
     if (dir === -1) xRef.current = track.scrollWidth / 4;
 
     let raf: number;
@@ -127,22 +79,20 @@ function TapeBand({
     return () => cancelAnimationFrame(raf);
   }, [dir, speed, velRef]);
 
-  // Double items for a seamless loop
   const doubled = [...items, ...items];
 
   return (
     <div
       aria-hidden="true"
+      className="absolute left-1/2 overflow-hidden bg-[var(--foreground)] dark:bg-[var(--foreground)]"
       style={{
-        width: `${TAPE_BAND_WIDTH_PCT}%`,
-        marginLeft: `${(100 - TAPE_BAND_WIDTH_PCT) / 2}%`,
-        transform: `rotate(${ROTATE}deg)`,
-        overflow: "hidden",
-        backgroundColor: bgVar,
-        borderTop: `3px solid ${borderVar}`,
-        borderBottom: `3px solid ${borderVar}`,
-        padding: "16px 0",
-        boxShadow: shadowVar,
+        width: `${RIBBON_WIDTH_PCT}%`,
+        top: "50%",
+        transform: `translate(-50%, calc(-50% + ${offsetY}px)) rotate(${rotateDeg}deg)`,
+        borderTop: "2.5px solid color-mix(in oklab, var(--accent) 60%, transparent)",
+        borderBottom: "2.5px solid color-mix(in oklab, var(--accent) 60%, transparent)",
+        boxShadow: "0 20px 60px -24px rgb(0 0 0 / 70%)",
+        padding: "14px 0",
       }}
     >
       <div
@@ -153,23 +103,17 @@ function TapeBand({
         {doubled.map((skill, i) => (
           <span
             key={`${skill}-${i}`}
-            className="flex shrink-0 items-center gap-3 whitespace-nowrap"
-            style={{ color: fgVar, padding: "0 14px" }}
+            className="flex shrink-0 items-center gap-3 whitespace-nowrap px-5 text-[var(--background)]"
           >
-            {/* Diamond separator */}
-            <span
-              className="font-portfolio-mono font-bold"
-              style={{ fontSize: "12px", opacity: 0.6, letterSpacing: 0 }}
-            >
-              ◆
-            </span>
-            <TapeIcon skill={skill} onDark={onDark} />
-            <span
-              className="font-portfolio-mono font-extrabold uppercase"
-              style={{ fontSize: "13px", letterSpacing: "3.5px" }}
-            >
+            <ToolkitIcon
+              skill={skill}
+              size={36}
+              className="shrink-0 brightness-[1.05]"
+            />
+            <span className="font-portfolio-mono text-[13px] font-black uppercase tracking-[2.5px]">
               {skill}
             </span>
+            <span className="mx-1 font-portfolio-mono text-[10px] opacity-30">◆</span>
           </span>
         ))}
       </div>
@@ -230,23 +174,29 @@ export default function SkillsSection({ sectionRef, visible }: SkillsSectionProp
           Technologies I{" "}
           <span className="text-[#c9f31d]">work with</span>
         </div>
+        <p
+          className="mx-auto max-w-2xl text-center text-sm text-[var(--muted)]"
+          style={{ opacity: visible ? 1 : 0, transition: "all 0.7s 0.3s" }}
+        >
+          Production stack used across web, mobile, AI, and cloud projects.
+        </p>
       </div>
 
-      {/* Tape bands — negated padding so they bleed full-width */}
       <div
-        className="-mx-[clamp(24px,5vw,80px)] flex flex-col gap-6"
+        className="-mx-[clamp(24px,5vw,80px)] relative h-[280px]"
         style={{
           opacity: visible ? 1 : 0,
           transition: "opacity 0.9s cubic-bezier(.19,1,.22,1) 0.4s",
         }}
       >
-        {TAPES.map((tape, i) => (
-          <TapeBand
+        {RIBBONS.map((ribbon, i) => (
+          <RibbonBand
             key={i}
-            items={tape.items}
-            dir={tape.dir}
-            speed={tape.speed}
-            variant={tape.variant}
+            items={ribbon.items}
+            dir={ribbon.dir}
+            speed={ribbon.speed}
+            rotateDeg={ribbon.rotateDeg}
+            offsetY={ribbon.offsetY}
             velRef={velRef}
           />
         ))}
