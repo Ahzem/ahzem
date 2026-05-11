@@ -2,6 +2,7 @@
 
 import type { RefObject } from "react";
 import { FlipHoverText } from "./flip-hover-text";
+import MediaImage from "./media-image";
 import { heroNameClass } from "./section-styles";
 
 type HeroSectionProps = {
@@ -24,9 +25,14 @@ export default function HeroSection({
       className="relative flex h-screen flex-col justify-center overflow-hidden px-[clamp(24px,5vw,80px)] text-[#f0ece2]"
       ref={sectionRef}
     >
-      <div
-        className="absolute inset-0 bg-cover bg-[80%_center] bg-no-repeat md:bg-right"
-        style={{ backgroundImage: "url('/bg-3.webp')" }}
+      <MediaImage
+        src="bg-3.webp"
+        alt="Hero background"
+        fill
+        priority
+        media={{ width: 1920, quality: 72 }}
+        sizes="100vw"
+        className="absolute inset-0 object-cover object-[80%_center] md:object-right"
       />
       <div className="pointer-events-none absolute inset-0 w-full bg-gradient-to-r from-[#0c0c0c] via-[#0c0c0c]/80 to-transparent md:w-3/4 lg:w-2/3" />
       <div

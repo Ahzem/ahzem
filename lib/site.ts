@@ -18,4 +18,4 @@ export const SITE_TITLE_DEFAULT =
  * Keep under ~160 characters for SERP; extended detail lives in JSON-LD.
  */
 export const SITE_DESCRIPTION =
-  "Software engineer portfolio: full-stack web and mobile (Next.js, NestJS, Flutter), cloud on AWS, AI agents and integrations. Projects, experience, certifications, and contact." as const;
+  "Muhammadh Ahzem is a software engineer building full-stack web and mobile apps with Next.js, NestJS, Flutter, AWS, and AI integrations. Explore projects and contact." as const;

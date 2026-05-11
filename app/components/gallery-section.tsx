@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GALLERY_IMAGES } from "../portfolio-data";
-import { useReveal } from "../hooks/use-reveal";
 import { GalleryLightbox, useGalleryLightbox } from "./gallery-lightbox";
 import { GalleryTile } from "./gallery-tile";
 
@@ -13,19 +12,59 @@ export default function GallerySection() {
   const { lightbox, lbVisible, openLb, closeLb } = useGalleryLightbox();
   const sectionRef = useRef<HTMLElement | null>(null);
   const [scrollOffset, setScrollOffset] = useState(0);
-  const [secRef, secVis] = useReveal<HTMLElement>(0.05);
+  const [enableParallax, setEnableParallax] = useState(true);
+  const [secVis, setSecVis] = useState(false);
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const syncReducedMotion = () => setEnableParallax(!reducedMotion.matches);
+    syncReducedMotion();
+    reducedMotion.addEventListener("change", syncReducedMotion);
+    return () => reducedMotion.removeEventListener("change", syncReducedMotion);
+  }, []);
 
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
-    const h = () => {
-      const rect = el.getBoundingClientRect();
-      const progress = -rect.top / (el.offsetHeight - window.innerHeight);
-      setScrollOffset(progress);
-    };
-    window.addEventListener("scroll", h, { passive: true });
-    return () => window.removeEventListener("scroll", h);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry?.isIntersecting) {
+          setSecVis(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.05 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (!enableParallax) {
+      setScrollOffset(0);
+      return;
+    }
+
+    const el = sectionRef.current;
+    if (!el) return;
+    let rafId: number | null = null;
+    const h = () => {
+      if (rafId !== null) return;
+      rafId = window.requestAnimationFrame(() => {
+        const rect = el.getBoundingClientRect();
+        const progress = -rect.top / (el.offsetHeight - window.innerHeight);
+        setScrollOffset(progress);
+        rafId = null;
+      });
+    };
+    h();
+    window.addEventListener("scroll", h, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", h);
+      if (rafId !== null) window.cancelAnimationFrame(rafId);
+    };
+  }, [enableParallax]);
 
   const previewImages = GALLERY_IMAGES.slice(0, HOME_GALLERY_PREVIEW_COUNT);
   const cols: (typeof previewImages)[] = [[], [], []];
@@ -42,23 +81,15 @@ export default function GallerySection() {
     return () => mq.removeEventListener("change", sync);
   }, []);
 
-  const baseSpeeds = [-40, 20, -30];
+  const baseSpeeds = enableParallax ? [-40, 20, -30] : [0, 0, 0];
   const speeds = baseSpeeds.map((s) => s * parallaxFactor);
-
-  const setRefs = useCallback(
-    (el: HTMLElement | null) => {
-      sectionRef.current = el;
-      (secRef as React.MutableRefObject<HTMLElement | null>).current = el;
-    },
-    [secRef],
-  );
 
   return (
     <>
       <section
         className="relative overflow-hidden px-[clamp(24px,5vw,80px)] pt-[140px] pb-[120px]"
         id="gallery"
-        ref={setRefs}
+        ref={sectionRef}
       >
         <div className="mb-[60px]">
           <div

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { buildMediaUrl } from "@/lib/media";
 import { getGalleryCaption } from "@/lib/gallery";
 import { useReveal } from "../hooks/use-reveal";
@@ -19,9 +19,19 @@ export function GalleryTile({ src, index, onClick }: GalleryTileProps) {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
+  const [enableTilt, setEnableTilt] = useState(true);
   const [rRef, vis] = useReveal<HTMLDivElement>(0.15);
 
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const syncReducedMotion = () => setEnableTilt(!reducedMotion.matches);
+    syncReducedMotion();
+    reducedMotion.addEventListener("change", syncReducedMotion);
+    return () => reducedMotion.removeEventListener("change", syncReducedMotion);
+  }, []);
+
   const handleMouseMove = (e: React.MouseEvent) => {
+    if (!enableTilt) return;
     const rect = imgRef.current?.getBoundingClientRect();
     if (!rect) return;
     const x = ((e.clientX - rect.left) / rect.width - 0.5) * 12;
@@ -49,7 +59,9 @@ export function GalleryTile({ src, index, onClick }: GalleryTileProps) {
         }}
         onClick={() => onClick({ src, caption })}
         style={{
-          transform: `perspective(600px) rotateY(${tilt.x}deg) rotateX(${tilt.y}deg) scale(${hovered ? 0.97 : 1})`,
+          transform: enableTilt
+            ? `perspective(600px) rotateY(${tilt.x}deg) rotateX(${tilt.y}deg) scale(${hovered ? 0.97 : 1})`
+            : `scale(${hovered ? 0.985 : 1})`,
           transition: hovered
             ? "transform 0.1s ease-out"
             : "transform 0.5s cubic-bezier(.19,1,.22,1)",
@@ -69,7 +81,7 @@ export function GalleryTile({ src, index, onClick }: GalleryTileProps) {
         )}
 
         <img
-          src={buildMediaUrl(src)}
+          src={buildMediaUrl(src, { width: 900, quality: 76 })}
           alt={caption}
           draggable={false}
           loading="lazy"

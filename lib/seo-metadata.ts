@@ -35,6 +35,12 @@ export function buildRootMetadata(): Metadata {
       "AWS",
       "portfolio",
       "Sri Lanka",
+      "Bandarawela",
+      "Efito Solutions",
+      "NOLIMIT Sri Lanka",
+      "ITUM",
+      "Moratuwa",
+      "Dikwella",
     ],
     category: "technology",
     robots: {
@@ -59,12 +65,21 @@ export function buildRootMetadata(): Metadata {
       siteName: SITE_AUTHOR,
       title: SITE_TITLE_DEFAULT,
       description: SITE_DESCRIPTION,
+      images: [
+        {
+          url: `${base}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: `${SITE_AUTHOR} portfolio preview`,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: SITE_TITLE_DEFAULT,
       description: SITE_DESCRIPTION,
       creator: "@_ahzem_",
+      images: [`${base}/opengraph-image`],
     },
     manifest: "/favicon/site.webmanifest",
     ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
