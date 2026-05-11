@@ -10,6 +10,7 @@ import EducationSection from "./education-section";
 import VolunteerSection from "./volunteer-section";
 import ExperienceSection from "./experience-section";
 import HeroSection from "./hero-section";
+import HolopinSection from "./holopin-section";
 import MarqueeStrip from "./marquee-strip";
 import {
   PortfolioCursorProvider,
@@ -53,6 +54,7 @@ export default function HomePageClient() {
   const [expRef, expVis] = useReveal<HTMLElement>(0.1);
   const [skillRef, skillVis] = useReveal<HTMLElement>(0.08);
   const [certRef, certVis] = useReveal<HTMLElement>(0.1);
+  const [holopinRef, holopinVis] = useReveal<HTMLElement>(0.1);
   const [contactRef, contactVis] = useReveal<HTMLElement>(0.1);
 
   useEffect(() => {
@@ -202,6 +204,10 @@ export default function HomePageClient() {
       <SectionDivider />
 
       <CertificationsSection sectionRef={certRef} visible={certVis} />
+
+      <SectionDivider />
+
+      <HolopinSection sectionRef={holopinRef} visible={holopinVis} />
 
       <SectionDivider />
 
