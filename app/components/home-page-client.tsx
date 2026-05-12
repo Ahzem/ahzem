@@ -16,6 +16,7 @@ import {
   PortfolioCursorProvider,
   type PortfolioCursorApi,
 } from "./portfolio-cursor-context";
+import Preloader from "./preloader";
 import ProjectsSection from "./projects-section";
 import SectionDivider from "./section-divider";
 import ServicesSection from "./services-section";
@@ -26,7 +27,6 @@ import { useReveal } from "../hooks/use-reveal";
 
 const GrainOverlay = dynamic(() => import("./grain-overlay"), { ssr: false });
 const CustomCursor = dynamic(() => import("./custom-cursor"), { ssr: false });
-const Preloader = dynamic(() => import("./preloader"), { ssr: false });
 const GallerySection = dynamic(() => import("./gallery-section"));
 const TestimonialsSection = dynamic(() => import("./testimonials-section"));
 
@@ -35,12 +35,20 @@ const clamp = (v: number, lo: number, hi: number) =>
   Math.min(Math.max(v, lo), hi);
 
 export default function HomePageClient() {
+  const detectSupportsHeavyFx = () => {
+    if (typeof window === "undefined") return true;
+    return (
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
+      window.matchMedia("(pointer: fine)").matches
+    );
+  };
+
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [cursorLabel, setCursorLabel] = useState("");
   const [cursorScale, setCursorScale] = useState(1);
   const [loaded, setLoaded] = useState(false);
   const [introDoneState, setIntroDoneState] = useState(false);
-  const [supportsHeavyFx, setSupportsHeavyFx] = useState(false);
+  const [supportsHeavyFx, setSupportsHeavyFx] = useState(detectSupportsHeavyFx);
   const [deferSecondarySections, setDeferSecondarySections] = useState(false);
 
   const hScrollRef = useRef<HTMLElement | null>(null);
