@@ -276,42 +276,71 @@ export default function FooterSvgPhysics() {
       });
       ro.observe(parent);
 
-      // ─── DeviceOrientation: water-like gravity ───────────────────
-      // Maps device tilt to engine gravity so SVGs slosh like liquid.
-      // gamma = left/right tilt (-90…90) → gravity.x
-      // beta  = front/back tilt (-180…180) → gravity.y
-      const GRAVITY_SCALE = 0.0025; // how strongly tilt maps to gravity
-      const LERP_FACTOR = 0.08;     // smoothing — lower = more fluid
-      const MAX_G = 2.5;            // clamp to prevent extreme forces
+      // ─── Dynamic gravity: water-like sloshing ────────────────────
+      // Desktop: mouse position relative to section center → gravity direction
+      // Mobile:  real DeviceOrientation (gyroscope) → gravity direction
+      // Both feed into the same smoothed lerp system for fluid motion.
+
+      const LERP_FACTOR = 0.06;     // smoothing — lower = more fluid/sluggish
+      const MAX_G = 2;              // clamp to prevent extreme forces
+      const MOUSE_INFLUENCE = 1.5;  // how strongly mouse offset maps to gravity
 
       let targetGx = 0;
       let targetGy = 0.8; // default downward gravity
-      let orientationActive = false;
+      let gravityActive = false;
+      let usingDeviceOrientation = false; // true once real gyro data arrives
 
-      const clamp = (v: number, min: number, max: number) =>
+      const clampVal = (v: number, min: number, max: number) =>
         Math.max(min, Math.min(max, v));
 
+      // ── Mouse-based virtual tilt (desktop) ──────────────────────
+      // Mouse position relative to the section center creates a "tilt".
+      // Center = default gravity (straight down).
+      // Move left → gravity pulls left, move right → pulls right, etc.
+      const onGravityMouseMove = (e: MouseEvent) => {
+        if (usingDeviceOrientation) return; // real gyro takes priority
+        const rect = parent.getBoundingClientRect();
+        // Is cursor anywhere near the section? (extend zone 200px above)
+        if (
+          e.clientX < rect.left - 100 || e.clientX > rect.right + 100 ||
+          e.clientY < rect.top - 200 || e.clientY > rect.bottom + 100
+        ) return;
+
+        gravityActive = true;
+
+        // Normalize mouse position: -1 (left/top) to +1 (right/bottom)
+        const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;  // -1…+1
+        const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;  // -1…+1
+
+        targetGx = clampVal(nx * MOUSE_INFLUENCE, -MAX_G, MAX_G);
+        // Bias toward downward: even at top of section, gravity still pulls down a bit
+        targetGy = clampVal(0.4 + ny * MOUSE_INFLUENCE * 0.8, -MAX_G, MAX_G);
+      };
+
+      window.addEventListener("mousemove", onGravityMouseMove, { passive: true });
+
+      // Reset gravity when mouse leaves the section area
+      const onGravityMouseLeave = () => {
+        if (usingDeviceOrientation) return;
+        // Smoothly return to default gravity (lerp will handle it)
+        targetGx = 0;
+        targetGy = 0.8;
+      };
+      parent.addEventListener("mouseleave", onGravityMouseLeave, { passive: true });
+
+      // ── DeviceOrientation (mobile) ──────────────────────────────
       const onDeviceOrientation = (e: DeviceOrientationEvent) => {
         if (e.gamma == null || e.beta == null) return;
-        orientationActive = true;
+        // Only switch to device orientation if we get real non-zero data
+        if (e.gamma === 0 && e.beta === 0 && e.alpha === 0) return;
+        usingDeviceOrientation = true;
+        gravityActive = true;
 
         // gamma: -90 (left) to 90 (right) → gravity.x
-        // beta: -180 to 180 — we use a subset for natural feel
-        // Normalize to roughly -1…1 range then scale
-        targetGx = clamp((e.gamma / 90) * MAX_G, -MAX_G, MAX_G);
-        // beta ~0 = flat, ~90 = upright. Shift so flat = slight down, tilt forward = more down
-        targetGy = clamp(((e.beta - 20) / 60) * MAX_G, -MAX_G, MAX_G);
+        targetGx = clampVal((e.gamma / 90) * MAX_G, -MAX_G, MAX_G);
+        // beta ~0 = flat, ~90 = upright. Shift so flat ≈ slight down
+        targetGy = clampVal(((e.beta - 20) / 60) * MAX_G, -MAX_G, MAX_G);
       };
-
-      // Smoothly interpolate gravity each physics tick for water-like feel
-      const onBeforeUpdate = () => {
-        if (!orientationActive) return;
-        const g = engine.gravity;
-        g.x += (targetGx - g.x) * LERP_FACTOR;
-        g.y += (targetGy - g.y) * LERP_FACTOR;
-        g.scale = GRAVITY_SCALE;
-      };
-      Events.on(engine, "beforeUpdate", onBeforeUpdate);
 
       // Request permission on iOS 13+ and start listening
       const startOrientation = () => {
@@ -331,28 +360,39 @@ export default function FooterSvgPhysics() {
         }
       };
 
-      // Only activate on touch-capable devices
-      if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
-        // iOS requires a user gesture to request permission, so we start
-        // listening on the first touch on the section's parent.
-        const DOE = DeviceOrientationEvent as unknown as {
-          requestPermission?: () => Promise<string>;
-        };
-        if (typeof DOE.requestPermission === "function") {
-          const onFirstTouch = () => {
-            startOrientation();
-            parent.removeEventListener("touchstart", onFirstTouch);
-          };
-          parent.addEventListener("touchstart", onFirstTouch, { passive: true, once: true });
-        } else {
+      // Try DeviceOrientation on all platforms (not just touch devices)
+      // — on desktop it simply won't fire, mouse fallback handles it
+      // — on mobile with gyro, real orientation data takes over
+      const DOE = DeviceOrientationEvent as unknown as {
+        requestPermission?: () => Promise<string>;
+      };
+      if (typeof DOE.requestPermission === "function") {
+        // iOS: needs user gesture → attach to first touch
+        const onFirstTouch = () => {
           startOrientation();
-        }
+          parent.removeEventListener("touchstart", onFirstTouch);
+        };
+        parent.addEventListener("touchstart", onFirstTouch, { passive: true, once: true });
+      } else {
+        // Android / desktop: just start listening (no-op if no sensor)
+        startOrientation();
       }
+
+      // ── Smooth gravity interpolation (shared) ───────────────────
+      const onBeforeUpdate = () => {
+        if (!gravityActive) return;
+        const g = engine.gravity;
+        g.x += (targetGx - g.x) * LERP_FACTOR;
+        g.y += (targetGy - g.y) * LERP_FACTOR;
+      };
+      Events.on(engine, "beforeUpdate", onBeforeUpdate);
 
       cleanup = () => {
         window.removeEventListener("mousemove", onMouseMove);
         window.removeEventListener("mousedown", onMouseDown);
         window.removeEventListener("mouseup", onMouseUp);
+        window.removeEventListener("mousemove", onGravityMouseMove);
+        parent.removeEventListener("mouseleave", onGravityMouseLeave);
         window.removeEventListener("deviceorientation", onDeviceOrientation);
         Events.off(engine, "beforeUpdate", onBeforeUpdate);
         ro.disconnect();
