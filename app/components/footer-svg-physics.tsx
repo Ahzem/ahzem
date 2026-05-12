@@ -276,10 +276,85 @@ export default function FooterSvgPhysics() {
       });
       ro.observe(parent);
 
+      // ─── DeviceOrientation: water-like gravity ───────────────────
+      // Maps device tilt to engine gravity so SVGs slosh like liquid.
+      // gamma = left/right tilt (-90…90) → gravity.x
+      // beta  = front/back tilt (-180…180) → gravity.y
+      const GRAVITY_SCALE = 0.0025; // how strongly tilt maps to gravity
+      const LERP_FACTOR = 0.08;     // smoothing — lower = more fluid
+      const MAX_G = 2.5;            // clamp to prevent extreme forces
+
+      let targetGx = 0;
+      let targetGy = 0.8; // default downward gravity
+      let orientationActive = false;
+
+      const clamp = (v: number, min: number, max: number) =>
+        Math.max(min, Math.min(max, v));
+
+      const onDeviceOrientation = (e: DeviceOrientationEvent) => {
+        if (e.gamma == null || e.beta == null) return;
+        orientationActive = true;
+
+        // gamma: -90 (left) to 90 (right) → gravity.x
+        // beta: -180 to 180 — we use a subset for natural feel
+        // Normalize to roughly -1…1 range then scale
+        targetGx = clamp((e.gamma / 90) * MAX_G, -MAX_G, MAX_G);
+        // beta ~0 = flat, ~90 = upright. Shift so flat = slight down, tilt forward = more down
+        targetGy = clamp(((e.beta - 20) / 60) * MAX_G, -MAX_G, MAX_G);
+      };
+
+      // Smoothly interpolate gravity each physics tick for water-like feel
+      const onBeforeUpdate = () => {
+        if (!orientationActive) return;
+        const g = engine.gravity;
+        g.x += (targetGx - g.x) * LERP_FACTOR;
+        g.y += (targetGy - g.y) * LERP_FACTOR;
+        g.scale = GRAVITY_SCALE;
+      };
+      Events.on(engine, "beforeUpdate", onBeforeUpdate);
+
+      // Request permission on iOS 13+ and start listening
+      const startOrientation = () => {
+        const DOE = DeviceOrientationEvent as unknown as {
+          requestPermission?: () => Promise<string>;
+        };
+        if (typeof DOE.requestPermission === "function") {
+          DOE.requestPermission()
+            .then((state: string) => {
+              if (state === "granted") {
+                window.addEventListener("deviceorientation", onDeviceOrientation, { passive: true });
+              }
+            })
+            .catch(() => {});
+        } else {
+          window.addEventListener("deviceorientation", onDeviceOrientation, { passive: true });
+        }
+      };
+
+      // Only activate on touch-capable devices
+      if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
+        // iOS requires a user gesture to request permission, so we start
+        // listening on the first touch on the section's parent.
+        const DOE = DeviceOrientationEvent as unknown as {
+          requestPermission?: () => Promise<string>;
+        };
+        if (typeof DOE.requestPermission === "function") {
+          const onFirstTouch = () => {
+            startOrientation();
+            parent.removeEventListener("touchstart", onFirstTouch);
+          };
+          parent.addEventListener("touchstart", onFirstTouch, { passive: true, once: true });
+        } else {
+          startOrientation();
+        }
+      }
+
       cleanup = () => {
         window.removeEventListener("mousemove", onMouseMove);
         window.removeEventListener("mousedown", onMouseDown);
         window.removeEventListener("mouseup", onMouseUp);
+        window.removeEventListener("deviceorientation", onDeviceOrientation);
+        Events.off(engine, "beforeUpdate", onBeforeUpdate);
         ro.disconnect();
         Render.stop(render);
         Runner.stop(runner);

@@ -502,6 +502,7 @@ export type GalleryImage = {
 };
 
 export const GALLERY_IMAGES: GalleryImage[] = [
+  { src: "AWS-Community-Day-2026.webp" },
   { src: "Efito_Award_Ceromoney_2025_-_2.webp" },
   { src: "Efito_Award_Ceromoney_2025_-_3.webp" },
   { src: "Efito_Award_Ceromoney_2025_-_4.webp" },
