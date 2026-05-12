@@ -27,6 +27,23 @@ const nextConfig: NextConfig = {
         : []),
     ],
   },
+
+  // Allow device sensor APIs (DeviceOrientation) for the footer physics effect.
+  // Without this, browsers may silently block accelerometer/gyroscope access.
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Permissions-Policy",
+            value: "accelerometer=(self), gyroscope=(self), magnetometer=(self)",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
+

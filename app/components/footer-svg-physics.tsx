@@ -284,11 +284,13 @@ export default function FooterSvgPhysics() {
       // Both feed into the same smoothed lerp system for fluid motion.
 
       const LERP_FACTOR = 0.06;     // smoothing — lower = more fluid/sluggish
-      const MAX_G = 2;              // clamp to prevent extreme forces
-      const MOUSE_INFLUENCE = 1.5;  // how strongly mouse offset maps to gravity
+      // Engine uses gravity.scale = 0.001, so effective gravity = value × 0.001.
+      // MAX_G=800 → effective max = 0.8 (strong but not insane).
+      const MAX_G = 800;
+      const MOUSE_INFLUENCE = 600;  // how strongly mouse offset maps to gravity
 
       let targetGx = 0;
-      let targetGy = 0.8; // default downward gravity
+      let targetGy = 0.8; // matches engine init gravity.y
       let gravityActive = false;
       let usingDeviceOrientation = false; // true once real gyro data arrives
 
@@ -320,13 +322,14 @@ export default function FooterSvgPhysics() {
         const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
 
         targetGx = clampVal(nx * MOUSE_INFLUENCE, -MAX_G, MAX_G);
-        targetGy = clampVal(0.4 + ny * MOUSE_INFLUENCE * 0.8, -MAX_G, MAX_G);
+        // Bias downward: even at top of section, gravity still pulls down
+        targetGy = clampVal(200 + ny * MOUSE_INFLUENCE * 0.8, -MAX_G, MAX_G);
       };
 
       const onGravityMouseLeave = () => {
         if (usingDeviceOrientation) return;
         targetGx = 0;
-        targetGy = 0.8;
+        targetGy = 0.8; // return to default engine gravity
       };
 
       if (hasFinePointer) {
@@ -335,41 +338,46 @@ export default function FooterSvgPhysics() {
       }
 
       // ── DeviceOrientation (mobile gyroscope) ────────────────────
+      let orientationListenerAttached = false;
+
       const onDeviceOrientation = (e: DeviceOrientationEvent) => {
         if (e.gamma == null || e.beta == null) return;
-        if (e.gamma === 0 && e.beta === 0 && (e.alpha == null || e.alpha === 0)) return;
         usingDeviceOrientation = true;
         gravityActive = true;
 
         // gamma: -90 (tilt left) … +90 (tilt right) → gravity.x
         targetGx = clampVal((e.gamma / 45) * MAX_G, -MAX_G, MAX_G);
-        // beta: 0 (flat) … 90 (upright). Treat ~20° as neutral downward.
-        targetGy = clampVal(((e.beta - 20) / 45) * MAX_G, -MAX_G, MAX_G);
+        // beta: 0 (flat) … 90 (upright). Treat ~30° as neutral downward.
+        // Add a baseline downward pull so SVGs don't float away
+        targetGy = clampVal(100 + ((e.beta - 30) / 40) * MAX_G, -MAX_G, MAX_G);
+      };
+
+      const attachOrientationListener = () => {
+        if (orientationListenerAttached) return;
+        orientationListenerAttached = true;
+        // Use only the standard event — deviceorientationabsolute can have
+        // different value ranges on some Android devices and causes conflicts.
+        window.addEventListener("deviceorientation", onDeviceOrientation, {
+          passive: true,
+        });
       };
 
       const DOE = DeviceOrientationEvent as unknown as {
         requestPermission?: () => Promise<string>;
       };
 
-      const attachOrientationListener = () => {
-        // Prefer the absolute event when available — gives real-world frame.
-        window.addEventListener(
-          "deviceorientationabsolute" as keyof WindowEventMap,
-          onDeviceOrientation as EventListener,
-          { passive: true },
-        );
-        window.addEventListener("deviceorientation", onDeviceOrientation, { passive: true });
-      };
-
       let detachIosPermissionTrigger: (() => void) | null = null;
 
       if (typeof DOE.requestPermission === "function") {
-        // iOS 13+: needs a user gesture to request permission. Wire it up to
-        // any touch/click in the document so the first interaction unlocks it.
+        // iOS 13+: needs a user gesture to request permission.
+        // Listen on both touchend and click on the DOCUMENT (not just the
+        // section parent) so any interaction on the page unlocks sensors.
         const requestAndAttach = () => {
           DOE.requestPermission!()
             .then((state) => {
-              if (state === "granted") attachOrientationListener();
+              if (state === "granted") {
+                attachOrientationListener();
+              }
             })
             .catch(() => {});
         };
@@ -377,15 +385,18 @@ export default function FooterSvgPhysics() {
           requestAndAttach();
           if (detachIosPermissionTrigger) detachIosPermissionTrigger();
         };
-        window.addEventListener("touchend", onFirstGesture, { passive: true, once: true });
-        window.addEventListener("click", onFirstGesture, { once: true });
+        // Use document-level listeners — the footer section may have
+        // pointer-events:none, so it won't receive touch events directly.
+        document.addEventListener("touchend", onFirstGesture, { passive: true, once: true });
+        document.addEventListener("click", onFirstGesture, { once: true });
         detachIosPermissionTrigger = () => {
-          window.removeEventListener("touchend", onFirstGesture);
-          window.removeEventListener("click", onFirstGesture);
+          document.removeEventListener("touchend", onFirstGesture);
+          document.removeEventListener("click", onFirstGesture);
         };
       } else {
-        // Android / desktop: just attach. No sensor → no events → mouse path
-        // (only when fine pointer) keeps things lively.
+        // Android / desktop: no permission required, just attach.
+        // On desktop without sensors the event simply never fires and the
+        // mouse-based gravity (fine-pointer path) keeps things alive.
         attachOrientationListener();
       }
 
@@ -395,6 +406,8 @@ export default function FooterSvgPhysics() {
         const g = engine.gravity;
         g.x += (targetGx - g.x) * LERP_FACTOR;
         g.y += (targetGy - g.y) * LERP_FACTOR;
+        // scale stays at 0.001 (set at engine init) — our target values
+        // are already scaled to compensate (e.g. 800 × 0.001 = 0.8).
       };
       Events.on(engine, "beforeUpdate", onBeforeUpdate);
 
@@ -407,10 +420,6 @@ export default function FooterSvgPhysics() {
           parent.removeEventListener("mouseleave", onGravityMouseLeave);
         }
         if (detachIosPermissionTrigger) detachIosPermissionTrigger();
-        window.removeEventListener(
-          "deviceorientationabsolute" as keyof WindowEventMap,
-          onDeviceOrientation as EventListener,
-        );
         window.removeEventListener("deviceorientation", onDeviceOrientation);
         Events.off(engine, "beforeUpdate", onBeforeUpdate);
         ro.disconnect();
