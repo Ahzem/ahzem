@@ -261,95 +261,54 @@ export default function FooterSvgPhysics() {
       window.addEventListener("mousedown", onMouseDown, { passive: true });
       window.addEventListener("mouseup", onMouseUp, { passive: true });
 
-      // Responsive
+      // Responsive — use Matter's own resize API. Setting canvas.width/height
+      // directly (as a manual approach would) resets the 2D context and wipes
+      // out the pixelRatio scale transform Matter applied in Render.create,
+      // which squashes all sprites into a corner of the canvas (making them
+      // appear to vanish). Render.setSize handles this correctly.
       const ro = new ResizeObserver(() => {
         const nw = parent.clientWidth;
         const nh = parent.clientHeight;
-        const pr = render.options.pixelRatio ?? 1;
-        canvas.width = nw * pr;
-        canvas.height = nh * pr;
-        render.options.width = nw;
-        render.options.height = nh;
-        canvas.style.width = `${nw}px`;
-        canvas.style.height = `${nh}px`;
+        Render.setSize(render, nw, nh);
         makeWalls(nw, nh);
       });
       ro.observe(parent);
 
       // ─── Dynamic gravity: water-like sloshing ────────────────────
-      // Desktop (fine pointer): mouse position relative to section center
-      //                         → gravity direction.
-      // Mobile / touch devices: ONLY real DeviceOrientation (gyroscope)
-      //                         drives gravity — touches never tilt.
-      // Both feed into the same smoothed lerp system for fluid motion.
+      // Mobile / touch devices only — real DeviceOrientation (gyroscope)
+      // drives gravity. The cursor no longer auto-tilts gravity on desktop
+      // (it used to, but any upward tilt near the top of the section could
+      // fling icons out through the missing ceiling, so it was removed —
+      // desktop now only supports the direct drag-to-throw interaction).
 
       const LERP_FACTOR = 0.06;     // smoothing — lower = more fluid/sluggish
       // Engine uses gravity.scale = 0.001, so effective gravity = value × 0.001.
       // MAX_G=800 → effective max = 0.8 (strong but not insane).
       const MAX_G = 800;
-      const MOUSE_INFLUENCE = 600;  // how strongly mouse offset maps to gravity
+      // There is no ceiling wall (icons rain in from the top), so vertical
+      // gravity must NEVER go negative/upward or bodies get flung off the top
+      // of the canvas permanently. Floor it at a small positive pull instead.
+      const MIN_GY = 60;
 
       let targetGx = 0;
       let targetGy = 0.8; // matches engine init gravity.y
       let gravityActive = false;
-      let usingDeviceOrientation = false; // true once real gyro data arrives
 
       const clampVal = (v: number, min: number, max: number) =>
         Math.max(min, Math.min(max, v));
-
-      // Only treat the device as desktop when it has a fine pointer (real mouse).
-      // Touch devices intentionally skip the mouse-tilt path so touches near an
-      // edge can never tilt gravity — only physical device rotation can.
-      const hasFinePointer =
-        typeof window.matchMedia === "function" &&
-        window.matchMedia("(pointer: fine)").matches;
-
-      // ── Mouse-based virtual tilt (desktop only) ─────────────────
-      // Mouse position relative to the section creates a "tilt".
-      // Center = default gravity (straight down).
-      // Move left → gravity pulls left, move right → pulls right, etc.
-      const onGravityMouseMove = (e: MouseEvent) => {
-        if (usingDeviceOrientation) return; // real gyro takes priority
-        const rect = parent.getBoundingClientRect();
-        if (
-          e.clientX < rect.left - 100 || e.clientX > rect.right + 100 ||
-          e.clientY < rect.top - 200 || e.clientY > rect.bottom + 100
-        ) return;
-
-        gravityActive = true;
-
-        const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-        const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-
-        targetGx = clampVal(nx * MOUSE_INFLUENCE, -MAX_G, MAX_G);
-        // Bias downward: even at top of section, gravity still pulls down
-        targetGy = clampVal(200 + ny * MOUSE_INFLUENCE * 0.8, -MAX_G, MAX_G);
-      };
-
-      const onGravityMouseLeave = () => {
-        if (usingDeviceOrientation) return;
-        targetGx = 0;
-        targetGy = 0.8; // return to default engine gravity
-      };
-
-      if (hasFinePointer) {
-        window.addEventListener("mousemove", onGravityMouseMove, { passive: true });
-        parent.addEventListener("mouseleave", onGravityMouseLeave, { passive: true });
-      }
 
       // ── DeviceOrientation (mobile gyroscope) ────────────────────
       let orientationListenerAttached = false;
 
       const onDeviceOrientation = (e: DeviceOrientationEvent) => {
         if (e.gamma == null || e.beta == null) return;
-        usingDeviceOrientation = true;
         gravityActive = true;
 
         // gamma: -90 (tilt left) … +90 (tilt right) → gravity.x
         targetGx = clampVal((e.gamma / 45) * MAX_G, -MAX_G, MAX_G);
         // beta: 0 (flat) … 90 (upright). Treat ~30° as neutral downward.
         // Add a baseline downward pull so SVGs don't float away
-        targetGy = clampVal(100 + ((e.beta - 30) / 40) * MAX_G, -MAX_G, MAX_G);
+        targetGy = clampVal(100 + ((e.beta - 30) / 40) * MAX_G, MIN_GY, MAX_G);
       };
 
       const attachOrientationListener = () => {
@@ -395,8 +354,8 @@ export default function FooterSvgPhysics() {
         };
       } else {
         // Android / desktop: no permission required, just attach.
-        // On desktop without sensors the event simply never fires and the
-        // mouse-based gravity (fine-pointer path) keeps things alive.
+        // On desktop without sensors the event simply never fires, so
+        // gravity just stays at its static default.
         attachOrientationListener();
       }
 
@@ -415,10 +374,6 @@ export default function FooterSvgPhysics() {
         window.removeEventListener("mousemove", onMouseMove);
         window.removeEventListener("mousedown", onMouseDown);
         window.removeEventListener("mouseup", onMouseUp);
-        if (hasFinePointer) {
-          window.removeEventListener("mousemove", onGravityMouseMove);
-          parent.removeEventListener("mouseleave", onGravityMouseLeave);
-        }
         if (detachIosPermissionTrigger) detachIosPermissionTrigger();
         window.removeEventListener("deviceorientation", onDeviceOrientation);
         Events.off(engine, "beforeUpdate", onBeforeUpdate);
