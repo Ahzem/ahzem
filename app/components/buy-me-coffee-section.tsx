@@ -153,7 +153,7 @@ export default function BuyMeCoffeeSection() {
                   aria-label="Open Buy Me a Coffee page"
                 >
                   <Image
-                    src="/buymecofee/qr-code.png"
+                    src="/images/buymecofee/qr-code.png"
                     alt="Buy Me a Coffee QR code"
                     width={170}
                     height={170}
