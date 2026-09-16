@@ -160,7 +160,9 @@ html {
    Hero Stage: Developer Word Cloud + Masked Face
    ========================================================================== */
 .hero-stage {
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 0;
   width: 100%;
   height: 100vh;
   overflow: hidden;
@@ -239,29 +241,33 @@ html {
 .hero-w {
   display: inline-block;
   color: var(--hero-word);
+  opacity: 0.55;
   font-family: "Antonio", sans-serif;
   font-optical-sizing: auto;
   font-weight: 500;
   letter-spacing: 0.01em;
   will-change: transform;
   cursor: default;
-  transition: color 0.25s ease;
+  transition: color 0.25s ease, opacity 0.25s ease;
   pointer-events: auto;
 }
 
 .hero-w.s {
-  font-size: 0.72em;
+  font-size: 0.68em;
   font-weight: 400;
+  opacity: 0.48;
 }
 
 .hero-w.l {
-  font-size: 1.25em;
+  font-size: 1.15em;
   font-weight: 700;
+  opacity: 0.65;
 }
 
 .hero-w:hover,
 .hero-w.hot {
   color: var(--hero-word-hi);
+  opacity: 1;
 }
 
 /* Theme toggle: quiet corner control */

@@ -8,9 +8,13 @@ import { heroNameClass } from "./section-styles";
 const emptySubscribe = () => () => { };
 
 const ROWS: string[][] = [
-  ["code:l"],
-  ["algorithm"],
-  ["tensorflow:l"],
+  ["architecture:s"],
+  ["intelligence:s", "system:s"],
+  // ["neural:l", "model"],
+  ["compute:s", "pipeline:l"],
+  ["code:l", "frontend", "cloud:l"],
+  ["algorithm", "scalability:s"],
+  ["tensorflow:l", "AI:s"],
   ["resolution:s", "runtime:s", "API", "server:l"],
   ["code:l", "codebase:l", "API:l"],
   ["database:l", "resources:l", "api:s"],
@@ -21,7 +25,7 @@ const ROWS: string[][] = [
   ["git", "docker", "frontend", "backend", "git:s"],
   ["microservices", "git:l", "free:s", "solution"],
   ["node:l", "backend:l", "part:s", "with:s"],
-  ["JavaScript_", "code", "development", "Python:s"],
+  ["JavaScript", "code", "development", "Python:s"],
   ["devops:s", "microservices:s", "node:s"],
 ];
 
@@ -206,9 +210,15 @@ export default function HeroSection({
 
     rafId = requestAnimationFrame(frame);
 
+    const onScroll = () => {
+      measure();
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
     return () => {
       clearTimeout(initialMeasureTimeout);
       cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", onScroll);
       face.removeEventListener("load", onImageReady);
       window.removeEventListener("resize", onImageReady);
       window.removeEventListener("mousemove", point);
@@ -248,7 +258,7 @@ export default function HeroSection({
         ))}
       </div>
 
-      {/* Face: pinned to the right, full height, edges fade into background */}
+      {/* Face: pinned/sticky to the right, full height, edges fade into background */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         ref={faceRef}
@@ -307,17 +317,6 @@ export default function HeroSection({
           </div>
         </div>
       </div>
-
-      {/* Theme toggle: a quiet corner control */}
-      <button
-        id="toggle"
-        className="hero-toggle"
-        type="button"
-        aria-label="Switch color theme"
-        onClick={() => setTheme(isDark ? "light" : "dark")}
-      >
-        {isDark ? "light" : "dark"}
-      </button>
 
       {/* Subtle bottom scroll prompt */}
       <div

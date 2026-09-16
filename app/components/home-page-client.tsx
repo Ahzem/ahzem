@@ -183,53 +183,55 @@ export default function HomePageClient() {
 
       <HeroSection sectionRef={heroRef} visible={heroVis} introDone={introDone} />
 
-      <MarqueeStrip />
+      <main className="relative z-10 bg-background">
+        <MarqueeStrip />
 
-      <AboutSection sectionRef={aboutRef} visible={aboutVis} />
+        <AboutSection sectionRef={aboutRef} visible={aboutVis} />
 
-      <SectionDivider />
+        <SectionDivider />
 
-      <ExperienceSection sectionRef={expRef} visible={expVis} />
+        <ExperienceSection sectionRef={expRef} visible={expVis} />
 
-      <SectionDivider />
+        <SectionDivider />
 
-      <EducationSection />
+        <EducationSection />
 
-      <SectionDivider />
+        <SectionDivider />
 
-      <VolunteerSection />
+        <VolunteerSection />
 
-      <SectionDivider />
+        <SectionDivider />
 
-      <ProjectsSection hScrollRef={hScrollRef} hWrapRef={hWrapRef} />
+        <ProjectsSection hScrollRef={hScrollRef} hWrapRef={hWrapRef} />
 
-      <ServicesSection />
+        <ServicesSection />
 
-      <SectionDivider />
+        <SectionDivider />
 
-      <SkillsSection sectionRef={skillRef} visible={skillVis} />
+        <SkillsSection sectionRef={skillRef} visible={skillVis} />
 
-      <SectionDivider />
+        <SectionDivider />
 
-      <CertificationsSection sectionRef={certRef} visible={certVis} />
+        <CertificationsSection sectionRef={certRef} visible={certVis} />
 
-      <SectionDivider />
+        <SectionDivider />
 
-      <HolopinSection sectionRef={holopinRef} visible={holopinVis} />
+        <HolopinSection sectionRef={holopinRef} visible={holopinVis} />
 
-      <SectionDivider />
+        <SectionDivider />
 
-      {deferSecondarySections && <GallerySection />}
+        {deferSecondarySections && <GallerySection />}
 
-      {deferSecondarySections && <TestimonialsSection />}
+        {deferSecondarySections && <TestimonialsSection />}
 
-      <SectionDivider />
+        <SectionDivider />
 
-      <BuyMeCoffeeSection />
+        <BuyMeCoffeeSection />
 
-      <ContactSection sectionRef={contactRef} visible={contactVis} />
+        <ContactSection sectionRef={contactRef} visible={contactVis} />
 
-      <SiteFooter />
+        <SiteFooter />
+      </main>
     </PortfolioCursorProvider>
   );
 }

@@ -16,7 +16,7 @@ const MARQUEE_ITEMS = [
 
 export default function MarqueeStrip() {
   return (
-    <div className="overflow-hidden whitespace-nowrap border-y border-white/[0.06] py-7">
+    <div className="relative z-10 bg-background overflow-hidden whitespace-nowrap border-y border-white/[0.06] py-7">
       <div className="inline-flex animate-marquee hover:[animation-play-state:paused]">
         {[...Array(2)].map((_, j) => (
           <span
