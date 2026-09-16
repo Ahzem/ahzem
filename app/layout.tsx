@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import DevtoolsGuard from "./components/devtools-guard";
 import JsonLd from "./components/json-ld";
 import { ThemeProvider } from "./components/theme-provider";
 import { buildRootMetadata } from "@/lib/seo-metadata";
@@ -41,7 +42,10 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <JsonLd />
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          {children}
+          <DevtoolsGuard />
+        </ThemeProvider>
       </body>
     </html>
   );

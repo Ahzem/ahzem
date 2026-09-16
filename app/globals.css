@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap");
 @import "tailwindcss";
 
 /* Manual dark mode via `next-themes` — adds `.dark` on `<html>` */
@@ -54,6 +54,7 @@
 @theme {
   --font-portfolio: "Space Grotesk", sans-serif;
   --font-portfolio-mono: "JetBrains Mono", monospace;
+  --font-serif: "Instrument Serif", "Playfair Display", Georgia, serif;
   --animate-scroll-pulse: scroll-pulse 2s ease infinite;
   --animate-marquee: marquee 30s linear infinite;
   --animate-nudge: nudge 1.5s ease-in-out infinite;
