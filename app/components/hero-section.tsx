@@ -125,10 +125,11 @@ export default function HeroSection({
     }, 100);
 
     // Cursor physics: words get pushed away, then spring home
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let px = -9999;
     let py = -9999;
     let active = false;
-    const RADIUS = () => Math.max(Math.min(window.innerWidth, window.innerHeight) * 0.25, 200);
+    const RADIUS = () => Math.max(Math.min(window.innerWidth, window.innerHeight) * 0.22, 180);
 
     function point(e: MouseEvent | TouchEvent | PointerEvent) {
       const p = "touches" in e && e.touches.length ? e.touches[0] : (e as MouseEvent);
@@ -147,11 +148,14 @@ export default function HeroSection({
       py = -9999;
     };
     document.addEventListener("mouseleave", onLeave);
+    window.addEventListener("pointerleave", onLeave);
+    window.addEventListener("pointercancel", onLeave);
     window.addEventListener("touchend", onLeave);
+    window.addEventListener("touchcancel", onLeave);
 
     let rafId: number;
     function frame() {
-      if (++rectTick % 25 === 0) measure();
+      if (++rectTick % 30 === 0) measure();
       const R = RADIUS();
 
       for (let i = 0; i < words.length; i++) {
@@ -172,17 +176,22 @@ export default function HeroSection({
             const push = k * k * R * 0.55;
             fx = (dx / d) * push;
             fy = (dy / d) * push;
-            hot = k > 0.32;
+            hot = k > 0.35;
           }
         }
 
-        // spring toward the pushed target, damped
-        w.vx += (fx - w.x) * 0.12;
-        w.vy += (fy - w.y) * 0.12;
-        w.vx *= 0.78;
-        w.vy *= 0.78;
-        w.x += w.vx;
-        w.y += w.vy;
+        if (reduce) {
+          w.x = 0;
+          w.y = 0;
+        } else {
+          // spring toward the pushed target, damped
+          w.vx += (fx - w.x) * 0.12;
+          w.vy += (fy - w.y) * 0.12;
+          w.vx *= 0.78;
+          w.vy *= 0.78;
+          w.x += w.vx;
+          w.y += w.vy;
+        }
 
         const rot = w.x * 0.04;
         w.el.style.transform = `translate(${w.x.toFixed(2)}px,${w.y.toFixed(2)}px) rotate(${rot.toFixed(2)}deg)`;
@@ -206,7 +215,10 @@ export default function HeroSection({
       window.removeEventListener("pointermove", point);
       window.removeEventListener("touchmove", point);
       document.removeEventListener("mouseleave", onLeave);
+      window.removeEventListener("pointerleave", onLeave);
+      window.removeEventListener("pointercancel", onLeave);
       window.removeEventListener("touchend", onLeave);
+      window.removeEventListener("touchcancel", onLeave);
     };
   }, [show]);
 
