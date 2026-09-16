@@ -130,7 +130,7 @@ export default function SiteNav() {
         </button>
 
         <div className="flex items-center gap-3 md:gap-6">
-          <div className="hidden gap-8 md:flex">
+          <div className="hidden items-center md:flex md:gap-4 lg:gap-6 xl:gap-8">
             {NAV_SECTIONS.map((section) => (
               <button
                 key={section}

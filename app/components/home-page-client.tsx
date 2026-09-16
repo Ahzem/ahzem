@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import AboutSection from "./about-section";
+import BlogSection from "./blog-section";
 import BuyMeCoffeeSection from "./buy-me-coffee-section";
 import CertificationsSection from "./certifications-section";
 import ContactSection from "./contact-section";
@@ -223,6 +224,10 @@ export default function HomePageClient() {
         {deferSecondarySections && <GallerySection />}
 
         {deferSecondarySections && <TestimonialsSection />}
+
+        <SectionDivider />
+
+        <BlogSection />
 
         <SectionDivider />
 

@@ -10,6 +10,7 @@ export enum SectionId {
   Testimonials = "testimonials",
   Contact = "contact",
   Certifications = "certifications",
+  Blog = "blog",
 }
 
 export type Project = {
@@ -48,6 +49,7 @@ export const NAV_SECTIONS: SectionId[] = [
   SectionId.Skills,
   SectionId.Gallery,
   SectionId.Testimonials,
+  SectionId.Blog,
   SectionId.Contact,
 ];
 
@@ -709,3 +711,79 @@ export const TESTIMONIALS: Testimonial[] = [
     color: "#fb923c",
   },
 ];
+
+export type BlogPost = {
+  title: string;
+  excerpt: string;
+  date: string;
+  readTime: string;
+  tag: string;
+  img: string;
+  link: string;
+};
+
+export const BLOG_POSTS: BlogPost[] = [
+  {
+    title: "Why Sri Lanka's Gem Industry Needs a Digital Transformation",
+    excerpt:
+      "From the famous Blue Sapphire to many other precious stones, our country has been supplying gemstones to international markets for generations.",
+    date: "Jun 21, 2026",
+    readTime: "5 min",
+    tag: "Tech & Society",
+    img: "https://miro.medium.com/v2/resize:fill:320:214/1*BaSzzIZjetvcmIbY6V9ylA.png",
+    link: "https://medium.com/@ahzem/why-sri-lankas-gem-industry-needs-a-digital-transformation-9eb1cd19fb92",
+  },
+  {
+    title:
+      'Windows Ate My Port 4200! How I Fixed Angular\'s "Permission Denied" Nightmare',
+    excerpt:
+      "Hey devs! Ever had Angular CLI throw a tantrum with a permission denied error? Here's the fix that saved my sanity.",
+    date: "Jan 7, 2026",
+    readTime: "4 min",
+    tag: "Dev Tips",
+    img: "https://miro.medium.com/v2/resize:fill:320:214/1*vGBne3wBXB6j0Zt4znXHDA.png",
+    link: "https://medium.com/@ahzem/windows-ate-my-port-4200-how-i-fixed-angulars-permission-denied-nightmare-c267db30fe1f",
+  },
+  {
+    title:
+      "Setting Up Azure App Registration for Outlook Calendar Integration",
+    excerpt:
+      "Follow this exact workflow to get your calendar app connected to Microsoft in under 20 minutes.",
+    date: "Oct 2, 2025",
+    readTime: "6 min",
+    tag: "Azure",
+    img: "https://miro.medium.com/v2/resize:fill:320:214/1*NkUHZqNZa65Rh5B_8VLbbA.png",
+    link: "https://medium.com/@ahzem/step-by-step-guide-setting-up-azure-app-registration-for-outlook-calendar-integration-0f088dcec66a",
+  },
+  {
+    title: "The Ultimate Guide to Adding Custom Domains in Azure Portal",
+    excerpt:
+      "Because nobody wants their professional app stuck with a default azurewebsites.net URL forever.",
+    date: "Sep 30, 2025",
+    readTime: "7 min",
+    tag: "Azure",
+    img: "https://miro.medium.com/v2/resize:fill:320:214/1*INTZcZ90B5Go6SlPmBExrw.png",
+    link: "https://medium.com/@ahzem/the-ultimate-guide-to-adding-custom-domains-in-azure-portal-without-losing-your-mind-2e7e12f84dc4",
+  },
+  {
+    title: "How to Share Your MongoDB Database with a Friend",
+    excerpt:
+      "Ever worked on a project where your teammate asks you to send them your database so they can test it too? Here's how.",
+    date: "Sep 19, 2025",
+    readTime: "5 min",
+    tag: "Database",
+    img: "https://miro.medium.com/v2/resize:fill:320:214/1*QpdmRFAoaDdSP0hsI8g4dQ.png",
+    link: "https://medium.com/@ahzem/how-to-share-your-mongodb-database-with-a-friend-without-sending-your-laptop-along-94969bb1248b",
+  },
+  {
+    title: "Brace Yourself for AGI: What Grok 4 Means for Our Future",
+    excerpt:
+      "That feeling when you're scrolling through your phone and suddenly realize the future is happening faster than you can double-tap.",
+    date: "Jul 23, 2025",
+    readTime: "8 min",
+    tag: "AI",
+    img: "https://miro.medium.com/v2/resize:fill:320:214/0*tU-xEQggLz1UmT6Z.png",
+    link: "https://medium.com/@ahzem/brace-yourself-for-agi-what-elon-musks-grok-4-means-for-our-future-and-your-job-2117ab9da962",
+  },
+];
+
