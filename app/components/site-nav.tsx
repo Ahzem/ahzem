@@ -2,17 +2,30 @@
 
 import { Menu, X } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useCallback, useEffect, useId, useLayoutEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { NAV_SECTIONS } from "../portfolio-data";
 import { usePortfolioCursor } from "./portfolio-cursor-context";
 import ThemeToggle from "./theme-toggle";
+
+const emptySubscribe = () => () => {};
 
 export default function SiteNav() {
   const { setCursor, resetCursor } = usePortfolioCursor();
   const { resolvedTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [pastHero, setPastHero] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
   const menuId = useId();
 
   const scrollToSection = (id: string) => {
@@ -58,10 +71,6 @@ export default function SiteNav() {
     return () => mq.removeEventListener("change", closeIfDesktop);
   }, []);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   useLayoutEffect(() => {
     const hero = document.getElementById("hero");
     if (!hero) return;
@@ -77,21 +86,21 @@ export default function SiteNav() {
     };
   }, []);
 
-  const isDark = resolvedTheme === "dark";
-  const onBlackHero = !menuOpen && !pastHero;
+  const isDark = mounted ? resolvedTheme === "dark" : true;
+  const onBlackHero = isDark && !menuOpen && !pastHero;
 
   const logoClass =
-    menuOpen || (mounted && isDark) || (pastHero && !isDark)
+    menuOpen || (mounted && isDark) || pastHero || !isDark
       ? "text-[var(--foreground)] hover:text-[var(--accent)]"
       : "text-[#f0ece2] hover:text-[#c9f31d]";
 
   const desktopLinkClass =
-    !pastHero && (!mounted || !isDark)
-      ? "text-white/55 hover:text-[#f0ece2] after:bg-[#c9f31d]"
-      : "text-[var(--muted)] hover:text-[var(--foreground)] after:bg-[var(--accent)]";
+    !isDark || (mounted && pastHero)
+      ? "text-[var(--muted)] hover:text-[var(--foreground)] after:bg-[var(--accent)]"
+      : "text-white/55 hover:text-[#f0ece2] after:bg-[#c9f31d]";
 
   const menuIconClass =
-    menuOpen || (mounted && isDark) || (pastHero && !isDark)
+    menuOpen || (mounted && isDark) || pastHero || !isDark
       ? "border-[var(--border-subtle)] text-[var(--foreground)]"
       : "border-white/15 text-[#f0ece2]";
 
@@ -100,8 +109,10 @@ export default function SiteNav() {
       <nav
         className={`fixed top-0 right-0 left-0 flex items-center justify-between px-[clamp(20px,5vw,40px)] py-6 transition-[background-color,backdrop-filter,mix-blend-mode,z-index] duration-200 ${
           menuOpen
-            ? "z-[210] bg-[var(--background)]/95 backdrop-blur-md mix-blend-normal md:z-[100] md:bg-transparent md:backdrop-blur-none md:mix-blend-difference"
-            : "z-[100] mix-blend-difference"
+            ? "z-[210] bg-[var(--background)]/95 backdrop-blur-md mix-blend-normal md:z-[100] md:bg-transparent md:backdrop-blur-none"
+            : isDark
+            ? "z-[100] mix-blend-difference"
+            : "z-[100]"
         }`}
       >
         <button

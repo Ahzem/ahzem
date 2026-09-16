@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Barlow+Condensed:wght@400;500;600&display=swap");
 @import "tailwindcss";
 
 /* Manual dark mode via `next-themes` — adds `.dark` on `<html>` */
@@ -16,6 +16,12 @@
   --border-subtle: rgb(0 0 0 / 8%);
   --surface-elevated: #ffffff;
   --counter-idle-stroke: rgb(0 0 0 / 14%);
+  /* hero interactive word cloud tokens (light) */
+  --hero-bg: #f1efeb;
+  --hero-word: #6b6b6b;
+  --hero-word-hi: #0a0a0a;
+  --hero-face-filter: contrast(1.05) brightness(1.05);
+  --hero-toggle: #9a9a9a;
   /* skills-section caution tapes */
   --tape-bright-bg: #c9f31d;
   --tape-bright-fg: #0c0c0c;
@@ -39,6 +45,12 @@
   --border-subtle: rgb(255 255 255 / 6%);
   --surface-elevated: #121212;
   --counter-idle-stroke: rgb(255 255 255 / 12%);
+  /* hero interactive word cloud tokens (dark) */
+  --hero-bg: #000000;
+  --hero-word: #8a8a8a;
+  --hero-word-hi: #f4f4f4;
+  --hero-face-filter: none;
+  --hero-toggle: #5c5c5c;
   /* Tapes: same lime; contrast strip slightly lifted off page bg for separation */
   --tape-bright-bg: #c9f31d;
   --tape-bright-fg: #0c0c0c;
@@ -49,6 +61,22 @@
   --tape-icon-shadow: drop-shadow(0 1px 3px rgb(0 0 0 / 45%));
   --tape-shadow-bright: 0 4px 32px -10px rgb(201 243 29 / 18%);
   --tape-shadow-contrast: 0 4px 40px -12px rgb(0 0 0 / 65%);
+}
+
+html[data-theme="light"] {
+  --hero-bg: #f1efeb;
+  --hero-word: #6b6b6b;
+  --hero-word-hi: #0a0a0a;
+  --hero-face-filter: contrast(1.05) brightness(1.05);
+  --hero-toggle: #9a9a9a;
+}
+
+html[data-theme="dark"] {
+  --hero-bg: #000000;
+  --hero-word: #8a8a8a;
+  --hero-word-hi: #f4f4f4;
+  --hero-face-filter: none;
+  --hero-toggle: #5c5c5c;
 }
 
 @theme {
@@ -64,6 +92,7 @@
 }
 
 @keyframes scroll-pulse {
+
   0%,
   100% {
     opacity: 0.3;
@@ -87,6 +116,7 @@
 }
 
 @keyframes nudge {
+
   0%,
   100% {
     transform: translateX(0);
@@ -119,5 +149,150 @@ html {
 @utility hide-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;
-  &::-webkit-scrollbar { display: none; }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Hero Stage: Developer Word Cloud + Masked Face
+   ========================================================================== */
+.hero-stage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--hero-bg);
+  transition: background 0.5s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Face: pinned to the right, full height, edges fade into whatever the background is */
+.hero-face {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: auto;
+  max-width: 60vw;
+  object-fit: cover;
+  object-position: right center;
+  filter: var(--hero-face-filter);
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0, #000 18%, #000 78%, transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 12%, #000 90%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent 0, #000 18%, #000 78%, transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 12%, #000 90%, transparent 100%);
+  mask-composite: intersect;
+  pointer-events: none;
+  user-select: none;
+  transition: filter 0.5s ease, opacity 0.5s ease;
+}
+
+/* Words hug the left edge of the face */
+.hero-cloud {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: var(--cloud-right, 39vh);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.15em;
+  padding: 6vh 0 6vh 4vw;
+  font-size: clamp(14px, 3.2vw, 44px);
+  line-height: 1;
+  font-family: "Barlow Condensed", "Roboto Condensed", "Arial Narrow", sans-serif;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.55em;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.hero-w {
+  display: inline-block;
+  color: var(--hero-word);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  will-change: transform;
+  cursor: default;
+  transition: color 0.25s ease;
+  pointer-events: auto;
+}
+
+.hero-w.s {
+  font-size: 0.72em;
+  font-weight: 400;
+}
+
+.hero-w.l {
+  font-size: 1.25em;
+  font-weight: 600;
+}
+
+.hero-w:hover,
+.hero-w.hot {
+  color: var(--hero-word-hi);
+}
+
+/* Theme toggle: quiet corner control */
+.hero-toggle {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  z-index: 20;
+  background: none;
+  border: 1px solid var(--hero-toggle);
+  color: var(--hero-word);
+  font: inherit;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: color 0.25s, border-color 0.25s;
+}
+
+.hero-toggle:hover,
+.hero-toggle:focus-visible {
+  color: var(--hero-word-hi);
+  border-color: var(--hero-word-hi);
+  outline: none;
+}
+
+@media (max-width: 760px) {
+  .hero-face {
+    height: 62%;
+    top: auto;
+    bottom: 0;
+    max-width: 80vw;
+  }
+
+  .hero-cloud {
+    right: 0 !important;
+    bottom: 38%;
+    justify-content: flex-end;
+    padding: 5vh 5vw 2vh 5vw;
+    font-size: clamp(15px, 6.2vw, 30px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .hero-w,
+  .hero-row {
+    transition: none;
+  }
 }
