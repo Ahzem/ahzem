@@ -236,7 +236,7 @@ export default function HeroSection({
     <section
       id="hero"
       ref={sectionRef}
-      className="hero-stage relative flex min-h-screen min-h-[100dvh] flex-col justify-end md:justify-center overflow-hidden px-[clamp(20px,5vw,80px)] pt-[max(4.5rem,calc(env(safe-area-inset-top)+3.5rem))] pb-[max(7.5rem,calc(env(safe-area-inset-bottom)+6rem))] md:py-0 transition-opacity duration-700"
+      className="hero-stage relative flex min-h-screen min-h-[100dvh] flex-col justify-end md:justify-center overflow-hidden px-[clamp(20px,5vw,80px)] pt-[max(4.5rem,calc(env(safe-area-inset-top)+3.5rem))] pb-[max(8.5rem,calc(env(safe-area-inset-bottom)+7rem))] md:py-0 transition-opacity duration-700"
       style={{ opacity: show ? 1 : 0 }}
     >
       {/* Cloud of developer words hugging the face */}
