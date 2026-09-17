@@ -208,14 +208,21 @@ html {
   justify-content: center;
   align-items: flex-end;
   gap: 0.15em;
-  padding: 6vh 0 6vh 4vw;
-  font-size: clamp(14px, 3.2vw, 44px);
+  padding: clamp(72px, 9vh, 95px) 0 clamp(45px, 7vh, 70px) 4vw;
+  font-size: clamp(14px, min(2.5vw, 3.8vh), 38px);
   line-height: 1;
   font-family: "Antonio", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
   pointer-events: none;
   user-select: none;
+}
+
+@media (min-width: 1600px) {
+  .hero-cloud {
+    padding: 6vh 0 6vh 4vw;
+    font-size: clamp(14px, 3.2vw, 44px);
+  }
 }
 
 .antonio {
@@ -295,20 +302,47 @@ html {
   outline: none;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 768px) {
+  .hero-stage {
+    min-height: 100dvh;
+    justify-content: flex-end;
+  }
+
   .hero-face {
-    height: 62%;
-    top: auto;
-    bottom: 0;
-    max-width: 80vw;
+    height: 56%;
+    top: clamp(50px, 6.5vh, 70px);
+    bottom: auto;
+    right: -2vw;
+    max-width: 92vw;
+    object-position: right top;
+    -webkit-mask-image:
+      linear-gradient(to bottom, transparent 0%, #000 8%, #000 62%, transparent 100%),
+      linear-gradient(to left, #000 0%, #000 65%, transparent 100%);
+    mask-image:
+      linear-gradient(to bottom, transparent 0%, #000 8%, #000 62%, transparent 100%),
+      linear-gradient(to left, #000 0%, #000 65%, transparent 100%);
   }
 
   .hero-cloud {
+    top: clamp(65px, 8.5vh, 90px);
+    bottom: auto;
     right: 0 !important;
-    bottom: 38%;
-    justify-content: flex-end;
-    padding: 5vh 5vw 2vh 5vw;
-    font-size: clamp(15px, 6.2vw, 30px);
+    left: 0;
+    z-index: 4;
+    opacity: 0.16;
+    padding: 0 4vw 0 4vw;
+    font-size: clamp(12px, 4vw, 20px);
+    gap: 0.08em;
+    pointer-events: none;
+    justify-content: flex-start;
+  }
+
+  .hero-cloud .hero-w {
+    opacity: 0.45;
+  }
+
+  .hero-scroll-prompt {
+    display: none;
   }
 }
 
