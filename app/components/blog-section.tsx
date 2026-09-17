@@ -66,6 +66,14 @@ const BlogRow = ({
           >
             {blog.tag}
           </span>
+          {blog.title.toLowerCase().includes("gem") && (
+            <span
+              className="rounded-full border border-[var(--accent)]/40 bg-[var(--accent)]/10 px-2.5 py-0.5 text-[10px] font-medium tracking-[0.5px] text-[var(--accent)]"
+              title="The thesis behind Ishq Gems"
+            >
+              Thesis behind Ishq Gems
+            </span>
+          )}
           <span className="blog-meta font-portfolio-mono text-xs tracking-[0.5px] text-[var(--muted)]">
             {blog.date} · {blog.readTime} read
           </span>

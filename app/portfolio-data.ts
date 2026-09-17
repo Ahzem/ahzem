@@ -11,6 +11,7 @@ export enum SectionId {
   Contact = "contact",
   Certifications = "certifications",
   Blog = "blog",
+  Venture = "venture",
 }
 
 export type Project = {
@@ -185,6 +186,18 @@ export const SKILLS_CENTER = [
 ];
 
 export const EXPERIENCES: Experience[] = [
+  {
+    company: "Ishq Gems",
+    period: "2025 — Present",
+    logo: "/images/ishq-logo.png",
+    roles: [
+      {
+        period: "2025 — Present",
+        role: "Co-Founder & Lead Engineer",
+        desc: "Founded NGJA-licensed Ceylon gemstone & jewellery marketplace. Architected the digital platform with Next.js, AI concierge (Ishq Noor), multi-currency settlement, and worldwide logistics integration.",
+      },
+    ],
+  },
   {
     company: "Efito Solutions",
     period: "2025 — Present",
@@ -786,4 +799,36 @@ export const BLOG_POSTS: BlogPost[] = [
     link: "https://medium.com/@ahzem/brace-yourself-for-agi-what-elon-musks-grok-4-means-for-our-future-and-your-job-2117ab9da962",
   },
 ];
+
+export const VENTURE_DATA = {
+  name: "Ishq Gems",
+  legal: "Ishq Gems (Pvt) Ltd",
+  role: "Co-Founder & Lead Engineer",
+  period: "2025 — Present",
+  tagline: "Bridging heritage with innovation",
+  url: "https://ishqgems.com",
+  preview: "/images/ishq-hero.webp",
+  logo: "/images/ishq-logo.png",
+  desc: "A premium marketplace connecting global buyers with NGJA-licensed Sri Lankan gem dealers. Certified Ceylon sapphires, loose gemstones, and fine jewellery — with verified sellers, live auctions, and worldwide shipping.",
+  credentials: [
+    { label: "Company Registration", value: "PV 00335214" },
+    { label: "NGJA Licence", value: "20264DL38350" },
+    { label: "Authority", value: "Licensed Dealer & Exporter" },
+  ],
+  capabilities: [
+    { n: "I", k: "Ishq Noor", v: "An AI concierge guiding buyers to the right stone." },
+    { n: "II", k: "Merchant Houses", v: "Seller onboarding, storefronts, and analytics." },
+    { n: "III", k: "Settlement", v: "Stripe, PayPal, and direct bank transfer." },
+    { n: "IV", k: "Carriage", v: "DHL, FedEx, UPS, Aramex, and EMS integration." },
+    { n: "V", k: "Assurance", v: "Reputation, disputes, and chain of custody." },
+    { n: "VI", k: "Exchange", v: "Multi-currency display and worldwide despatch." },
+  ],
+  stack: ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "AI / LLM", "SEO"],
+  socials: [
+    { label: "Instagram", href: "https://www.instagram.com/ishq.gems" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/company/ishq-gems" },
+    { label: "Facebook", href: "https://web.facebook.com/ishqgems" },
+  ],
+};
+
 

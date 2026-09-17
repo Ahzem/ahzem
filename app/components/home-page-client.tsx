@@ -9,6 +9,7 @@ import CertificationsSection from "./certifications-section";
 import ContactSection from "./contact-section";
 import EducationSection from "./education-section";
 import VolunteerSection from "./volunteer-section";
+import VentureSection from "./venture-section";
 import ExperienceSection from "./experience-section";
 import HeroSection from "./hero-section";
 import HolopinSection from "./holopin-section";
@@ -192,6 +193,10 @@ export default function HomePageClient() {
         <SectionDivider />
 
         <ExperienceSection sectionRef={expRef} visible={expVis} />
+
+        <SectionDivider />
+
+        <VentureSection />
 
         <SectionDivider />
 
